@@ -1,0 +1,1916 @@
+Total pages: 53
+--- Page 1 ---
+PHỤ  LỤC  KỸ  THUẬT  Tài  liệu  kỹ  thuật  API  kết  nối  giữa  nhà  cung  cấp  dịch  vụ  HĐLĐ  điện  tử  và  
+Nền
+ 
+tảng
+ 
+quản
+ 
+lý
+ 
+HĐLĐ
+ 
+điện
+ 
+tử
+ 
+quốc
+ 
+gia
+   Lịch  sử  biên  soạn  tài  liệu  Ngày  thực  hiện  Người  thực  hiện  Nội  dung  điều  chỉnh  09/6/2025  Trần  Xuân  Trường  Tạo  mới      
+Nội  dung  tài  liệu:  
+I.  TỔNG  QUAN  2 
+1.  Mục  đích  2 
+2.  Phạm  vi  2 
+3.  Giải  thích  từ  ngữ  và  các  chữ  viết  tắt  2 
+4.  Các  yêu  cầu  chung  2 
+II.  NỘI  DUNG  3 
+1.  API  đăng  nhập  3 
+2.  API  đổi  mật  khẩu  5 
+3.  API  thêm  mới  thông  tin  doanh  nghiệp  7 
+4.  API  cập  nhật  thông  tin  doanh  nghiệp  10 
+5.  API  thêm  mới  một  hợp  đồng  lao  động  14 
+6.  API  Thêm  mới  lô  hợp  đồng  lao  động  19 
+7.  API  cập  nhật  thông  tin  hợp  đồng  lao  động  24 
+8.  API  upload  file  đính  kèm  hợp  đồng  lao  động  28 
+9.  API  xóa  file  đính  kèm  hợp  đồng  lao  động  30 
+10.  API  kiểm  tra  trạng  thái  giao  dịch  32 
+11.  API  lấy  thông  tin  hợp  đồng  lao  động  34 
+12.  API  lấy  danh  sách  tỉnh/thành  phố  38 
+13.  API  lấy  danh  sách  xã/phường  41 
+14.  API  lấy  danh  sách  lĩnh  vực  kinh  doanh  44 
+15.  API  lấy  danh  sách  ngành  nghề  46 
+16.  API  lấy  danh  sách  loại  hình  doanh  nghiệp  49 
+III.  MÃ  LỖI  52 
+1  
+--- Page 2 ---
+I.  TỔNG  QUAN  1.  Mục  đích  Tài  liệu  mô  tả  các  API  đồng  bộ  dữ  liệu  doanh  nghiệp,  hợp  đồng  lao  
+động
+ 
+từ
+ 
+các
+ 
+hệ
+ 
+thống
+ 
+quản
+ 
+lý
+ 
+hợp
+ 
+đồng
+ 
+lao
+ 
+động
+ 
+điện
+ 
+tử
+ 
+sang
+ 
+nền
+ 
+tảng
+ 
+hợp
+ 
+đồng
+ 
+lao
+ 
+động
+ 
+quốc
+ 
+gia.
+ 2.  Phạm  vi  Sử  dụng  cho  các  hệ  thống  quản  lý  hợp  đồng  điện  tử  đã  được  cấp  
+thông
+ 
+tin
+ 
+kết
+ 
+nối
+ 
+tới
+ 
+nền
+ 
+tảng
+ 
+hợp
+ 
+đồng
+ 
+lao
+ 
+động
+ 
+quốc
+ 
+gia
+ 3.  Giải  thích  từ  ngữ  và  các  chữ  viết  tắt  4.  Các  yêu  cầu  chung   Thông  số  Yêu  cầu  Mô  hình  API  Theo  chuẩn  Restful  API  hỗ  trợ  kiểu  dữ  liệu  json  Giao  thức  truyền  Giao  thức  kết  nối  HTTPS  sử  dụng  chứng  chỉ  TLS  Định  dạng  dữ  liệu  gửi  đi  
+Dữ  liệu  gửi  lên  server  là  định  dạng  JSON  
+Định  dạng  dữ  liệu  nhận  về  
+Dữ  liệu  nhận  về  dạng  JSON  
+Tiêu  chuẩn  dữ  liệu  Hệ  thống  hỗ  trợ  dữ  liệu  chuẩn  Unicode  (UTF-8)  Bảo  mật  -  Giao  thức  truyền  sử  dụng  HTTPS  -  Đăng  nhập  và  phân  quyền  sử  dụng  JWT  -  Chỉ  cấp  tài  khoản  truyền  dữ  liệu  cho  các  đơn  vị  cung  cấp  dịch  vụ  Hợp  đồng  điện  tử  đã  đăng  ký  trước          Kích  thước  file  tối  đa  cho  phép  upload  
+5MB    Dữ  liệu  trả  về  có  định  dạng  chung  như  sau:   Tên  trường  Mô  tả  status  Trạng  thái  thành  công  hay  thất  bại  error_code  Mã  lỗi  nếu  có  
+2  
+--- Page 3 ---
+message  Thông  báo  chi  tiết  Data  Dữ  liệu  trả  về   Thông  tin  domain:  Hệ  thống  thử  nghiệm:  https://workﬂow-acp.vnpt.vn/webhook
+  II.  NỘI  DUNG  1.  API  đăng  nhập  a.  Mô  tả  API  API  đăng  nhập  sử  dụng  user/pass  trả  lại  token   Tên  API  API  lấy  token  
+URL  
+/hdld/login  
+Request  Method  POST  
+Giao  thức  HTTPs   b.  Dữ  liệu  đầu  vào   STT  Tên  thuộc  tính  
+Kiểu  dữ  liệu  
+Bắt  buộc  
+Độ  dài  
+Mô  tả  
+1   
+username
+ 
+  
+String  Y    Tài  khoản  nhà  cung  cấp  dịch  vụ  eContract  được  cấp  trên  nền  tảng  
+2 
+password
+ 
+  
+String  Y    Mật  khẩu  đăng  nhập  
+ c.  Dữ  liệu  trả  về   
+3  
+--- Page 4 ---
+STT  Tên  thuộc  tính  
+Kiểu  dữ  liệu  
+Độ  dài  Mô  tả  
+1
+   
+  
+token
+ String    Token  dùng  cho  gọi  các  api  sau  
+2  
+status  
+String   Trạng  thái  thành  công/thất  bại  
+3  
+error_code  
+String   Mã  lỗi  
+4  message  
+String   Thông  báo  
+ d.  Bản  tin  mẫu   URL  
+/hdld/login  
+Request  mẫu  
+{  
+  "username":  "admin",  
+  "password":  "123456"  
+}  
+ 
+  
+Response  mẫu  {  
+    "status":  200,  
+    " error_code ":  "E00",  
+    "message":  "Thành  công", 
+    "token":  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHBpcmVzSW4iOjM2MDAsImp3dGlkIjoxLCJpYXQiOjE3NDk0NTE0MTV9.BPleSsY0UEuDk4d64YLw0kzWdexiLXawqo3yUs-IP3Q"     
+4  
+--- Page 5 ---
+}  
+ 
+ 2.  API  đổi  mật  khẩu   
+a.  Mô  tả  API  API  đổi  mật  khẩu  người  dùng   Tên  API  API  đổi  mật  khẩu  
+URL  
+/hdld/QuenMatKhau  
+Request  Method  POST  
+Giao  thức  HTTPs   b.  Dữ  liệu  đầu  vào   STT  Tên  thuộc  tính  
+Kiểu  dữ  liệu  
+Bắt  buộc  
+Độ  dài  
+Mô  tả  
+Header  
+1  Content-Type  
+String  Y   application/json  
+2  Authorization 
+String  Y   Token  nhận  về  khi  đăng  nhập  thành  công  
+Body  
+1   
+oldPassword  
+  
+String  Y    Password  cũ  
+5  
+--- Page 6 ---
+2 
+newPassword  
+  
+String  Y    Password  mới  
+ c.  Dữ  liệu  trả  về   STT  Tên  thuộc  tính  
+Kiểu  dữ  liệu  
+Độ  dài  Mô  tả  
+1
+   
+  
+token
+ String    Token  dùng  cho  gọi  các  api  sau  
+2  
+status  
+String   Trạng  thái  thành  công/thất  bại  
+3  
+error_code  
+String   Mã  lỗi  
+4  message  
+String   Thông  báo  
+ d.  Bản  tin  mẫu   URL  
+/hdld/login  
+Request  mẫu  
+{  
+  "username":  "admin",  
+  "password":  "YzGfrLk6U@wCP"  
+}  
+ 
+  
+6  
+--- Page 7 ---
+Response  mẫu  {  
+    "status":  200,  
+    "token":  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHBpcmVzSW4iOjM2MDAsImp3dGlkIjoxLCJpYXQiOjE3NDk0NTE0MTV9.BPleSsY0UEuDk4d64YLw0kzWdexiLXawqo3yUs-IP3Q",  
+    "msg":  "Thành  công"  
+}  
+ 
+ 
+3.  API  thêm  mới  thông  tin  doanh  nghiệp   
+a.  Mô  tả  API  API  thêm  mới  thông  tin  doanh  nghiệp   Tên  API  API  thêm  mới  thông  tin  doanh  nghiệp  
+URL  
+/hdld/ThemMoiDoanhNghiep  
+Request  Method  POST  
+Giao  thức  HTTPs   b.  Dữ  liệu  đầu  vào  
+ 
+STT  Tên  thuộc  tính  Kiểu  dữ  liệu  
+Bắt  buộc  
+Độ  dài  Mô  tả  
+Header  
+1  Content-Type  
+String  Y   application/json  
+2  Authorization 
+String  Y   Token  nhận  về  khi  đăng  nhập  thành  công  
+7  
+--- Page 8 ---
+Body  2  
+ten_doanh_nghiep
+ String  Y  250  Tên  đầy  đủ  của  doanh  nghiệp  
+ 
+loai_hinh_doanh_nghiep  
+ 
+ 
+String  Y   Mã  loại  hình  doanh  nghiệp  (theo  danh  mục  loại  hình  doanh  nghiệp  nền  tảng  quy  định)  
+3  
+dia_chi
+ String  Y  250  Địa  chỉ  chi  tiết  
+4  
+ma_tinh
+ String  Y  10  Mã  tỉnh/thành  phố  (theo  danh  mục  nền  tảng  quy  định)  
+5  
+ma_xa  
+ 
+String   10  Mã  xã/  phường  (theo  danh  mục  nền  tảng  quy  định)  5  
+nguoi_dai_dien  
+ 
+String  Y  250  Tên  người  đại  diện  theo  pháp  luật  6  
+dien_thoai  
+ 
+String  Y  20  Số  điện  thoại  liên  hệ  
+7  
+fax  
+ 
+String  N  20  Số  fax  
+8  
+email  
+ 
+String  Y  100  Email  liên  hệ  chính  thức  
+9  
+website  
+ 
+String  N  200  Trang  web  (nếu  có)  
+10  
+ma_so_thue  
+ 
+String  Y  20  Mã  số  thuế  /  Số  giấy  ĐKKD  
+Không  được  phép  trùng.  
+11  
+ma_linh_vuc  
+ 
+String  Y  10  Mã  lĩnh  vực  hoạt  động  (ID  danh  mục  nền  tảng)  
+8  
+--- Page 9 ---
+12  
+ma_nganh_nghe  
+ 
+String  Y  10  Mã  ngành  nghề  kinh  doanh  (ID  danh  mục  nền  tảng)  
+ 
+c.  Dữ  liệu  trả  về   
+ 
+STT  Tên  thuộc  tính  Kiểu  dữ  liệu  Độ  dài  Mô  tả  
+1  
+status  
+ 
+String  -  Trạng  thái:  Thành  công  /  Lỗi  
+2  
+Doanhnghiep_uuid  
+ 
+String  -  Mã  định  danh  doanh  nghiệp  do  nền  tảng  tự  sinh  (sử  dụng  hàm  tạo  mã  tự  động)  
+3  
+error_code  
+ 
+String  -  Mã  lỗi  (nếu  có)  
+4  
+message  
+ 
+String  -  Mô  tả  lỗi  hoặc  kết  quả  xử  lý  
+ 
+d.  Bản  tin  mẫu   URL  
+/hdld/login  
+Request  mẫu  
+{  
+    "ten_doanh_nghiep" :  "Tên  doanh  nghi ệ p",  
+    "loai_hinh_doanh_nghiep" :  "Lo ạ i  hình  doanh  nghi ệ p",  
+    "dia_chi" :  "Đ ố ng  Đa,  Hà  N ộ i",  
+    "ma_tinh" :  "HNI",  
+9  
+--- Page 10 ---
+    "ma_xa" :  "DD",  
+    "nguoi_dai_dien" :  "HKD",  
+    "dien_thoai" :  "0987654321",  
+    "fax" :  "",  
+    "email" :  "example@gmail.com",  
+    "website" :  "",  
+    "ma_so_thue" :  "1234567890",  
+    "ma_linh_vuc" :  "A",  
+    "ma_nganh_nghe":  "0111"  
+}  
+ 
+ 
+  
+Response  mẫu  {  
+    "status":  200,  
+    "Doanhnghiep_uuid":  "0dfdcf_5555555555",  
+    "error_code":  "E00",  
+    "message":  "Thành  công"  
+}  
+ 
+4.  API  cập  nhật  thông  tin  doanh  nghiệp   
+a.  Mô  tả  API  API  cập  nhật  thông  tin  doanh  nghiệp   Tên  API  API  thêm  mới  thông  tin  doanh  nghiệp  
+10  
+--- Page 11 ---
+URL  
+/hdld/CapNhatDoanhNghiep  
+Request  Method  POST  
+Giao  thức  HTTPs   b.  Dữ  liệu  đầu  vào  
+ 
+STT  Tên  thuộc  tính  Kiểu  dữ  liệu  
+Bắt  buộc  
+Độ  dài  Mô  tả  
+Header  1  Content-Type
+ 
+String  Y   application/json
+ 
+2  Authorization
+ 
+String  Y   
+Bearer  <Token  nhận  về  khi  login  thành  công>
+ 
+Body  
+1  
+doanhnghiep_uuid
+ String  Y  30  Mã  định  danh  doanh  nghiệp  của  nền  tảng  2  
+ten_doanh_nghiep
+ String  Y  250  Tên  đầy  đủ  của  doanh  nghiệp  
+3  
+loai_hinh_doanh_nghiep  
+ 
+ 
+String  Y   Mã  loại  hình  doanh  nghiệp  (theo  danh  mục  loại  hình  doanh  nghiệp  nền  tảng  quy  định)  
+4  
+dia_chi
+ String  Y  250  Địa  chỉ  chi  tiết  
+5  
+ma_tinh
+ String  Y  10  Mã  tỉnh/thành  phố  (theo  danh  mục  nền  tảng  quy  định)  
+6  
+ma_xa  
+ 
+String   10  Mã  xã/  phường  (theo  danh  mục  nền  tảng  quy  định)  7  
+nguoi_dai_dien  
+ 
+String  Y  250  Tên  người  đại  diện  theo  pháp  luật  
+11  
+--- Page 12 ---
+8  
+dien_thoai  
+ 
+String  Y  20  Số  điện  thoại  liên  hệ  
+9  
+fax  
+ 
+String  N  20  Số  fax  
+10  
+email  
+ 
+String  Y  100  Email  liên  hệ  chính  thức  
+11  
+website  
+ 
+String  N  200  Trang  web  (nếu  có)  
+12  
+ma_so_thue  
+ 
+String  Y  20  Mã  số  thuế  /  Số  giấy  ĐKKD  
+Không  được  phép  trùng.  
+13  
+ma_linh_vuc  
+ 
+String  Y  10  Mã  lĩnh  vực  hoạt  động  (ID  danh  mục  nền  tảng)  
+14  
+ma_nganh_nghe  
+ 
+String  Y  10  Mã  ngành  nghề  kinh  doanh  (ID  danh  mục  nền  tảng)  
+15  
+doanhnghiep_uuid  
+ 
+String  Y  30  Mã  định  danh  doanh  nghiệp  của  nền  tảng  
+ 
+c.  Dữ  liệu  trả  về   
+ 
+STT  Tên  thuộc  tính  Kiểu  dữ  liệu  Độ  dài  Mô  tả  
+1  
+status  
+ 
+String  -  Trạng  thái:  Thành  công  /  Lỗi  
+12  
+--- Page 13 ---
+2  
+doanhnghiep_uuid  
+ 
+String  -  Mã  định  danh  doanh  nghiệp  do  nền  tảng  tự  sinh  (sử  dụng  hàm  tạo  mã  tự  động)  
+3  
+error_code  
+ 
+String  -  Mã  lỗi  (nếu  có)  
+4  
+message  
+ 
+String  -  Mô  tả  lỗi  hoặc  kết  quả  xử  lý  
+ 
+d.  Bản  tin  mẫu   URL  
+/hdld/capnhatdoanhnghiep  
+Request  mẫu  
+{  
+    "ten_doanh_nghiep" :  "Xuân  Tr ườ ng  HYN",  
+    "loai_hinh_doanh_nghiep" :  "Lo ạ i  hình  doanh  nghi ệ p",  
+    "dia_chi" :  "Đ ố ng  Đa,  Hà  N ộ i",  
+    "ma_tinh" :  "HNI",  
+    "ma_xa" :  "MYDINH",  
+    "nguoi_dai_dien" :  "HKD",  
+    "dien_thoai" :  "0987654321",  
+    "fax" :  "",  
+    "email" :  "truongtx.hvktqs@gmail.com",  
+    "website" :  "",  
+    "ma_so_thue" :  "5555555555",  
+    "ma_linh_vuc" :  "A",  
+    "ma_nganh_nghe":  "0111",  
+13  
+--- Page 14 ---
+    "doanhnghiep_uuid" :  "0dfdcf_5555555555"  
+}
+ 
+Response  mẫu  {  
+    "status":  200,  
+    "doanhnghiep_uuid":  "0dfdcf_5555555555",  
+    "error_code":  "E00",  
+    "message":  "Thành  công"  
+}  
+ 
+5.  API  thêm  mới  một  hợp  đồng  lao  động   
+a.  Mô  tả  API  API  thêm  mới  thông  tin  hợp  đồng  lao  động   Tên  API  API  thêm  mới  thông  tin  hợp  đồng  lao  động  
+URL  
+/hdld/ThemMoiHopDongLaoDong  
+Request  Method  POST  
+Giao  thức  HTTPs   b.  Dữ  liệu  đầu  vào   
+STT  Tên  thuộc  tính  Kiểu  dữ  liệu  
+Bắt  buộc/  không  bắt  buộc  
+Độ  dài  Mô  tả  thêm  Header  1  Content-Type
+ 
+String  Y   application/json
+ 
+2  Authorization
+ 
+String  Y   
+Bearer  <Token  nhận  về  khi  login  thành  công>
+ 
+Body  
+14  
+--- Page 15 ---
+I  
+doanhnghiep_uuid  
+ 
+String  Y  30  Mã  định  danh  doanh  nghiệp  của  nền  tảng  
+II  thong_tin_nld
+ Object      
+Thông  tin  người  lao  động  bao  gồm  các  thông  tin:  
+  
+ho_ten  
+  String   Y   250  
+ Họ  và  tên  người  lao  động  
+  
+ma_so_bhxh  
+  String   N  30   Mã  số  BHXH  
+  
+ngay_sinh  
+  Datetime   Y    
+ Ngày  tháng  năm  sinh  của  người  lao  động  
+  
+gioi_tinh  
+  String   Y   10  
+ Giới  tính  của  người  lao  động  
+  
+ma_dinh_danh  
+  String   Y   20  
+ Mã  định  danh  người  lao  động  (CCCD/  Hộ  chiếu)  
+ 
+email  
+ String   N  100   
+ 
+dien_thoai  
+ String  N  20   
+III  
+thong_tin_hop_dong
+  Object     
+Thông  tin  hợp  đồng  gồm  các  thông  tin:  
+  
+cap_bac  
+  String   Y   250  
+ Cấp  bậc/  chức  vụ/  chức  danh  nghề  nơi  làm  việc  
+  
+vi_tri_lam_viec  
+  Int   Y    
+Vị  trí  làm  việc  của  người  lao  động  -  1:  Nhà  quản  lý  -  2:  Chuyên  môn  kỹ  thuật  bậc  cao  -  3:  Chuyên  môn  kỹ  thuật  bậc  trung  -  4:  Khác  
+  
+muc_luong  
+  String   Y   30  
+ Mức  lương  nêu  trong  hợp  đồng  
+  
+phu_cap_chuc_vu  
+  String   N   30   
+  
+phu_cap_tham_nien  
+  String   N   30  %  
+  
+tham_nien_nghe  
+  String   N   30  %  
+15  
+--- Page 16 ---
+  
+phu_cap_luong  
+  String   N   30   
+  
+cac_khoan_bo_sung  
+ String   N   30   
+  
+doc_hai_tu_ngay  
+  Datetime   N    
+Thời  gian  tham  gia  ngành  nghề  nặng  nhọc/  độc  hại  (Từ  ngày  -  đến  ngày)  Từ  ngày  nhỏ  hơn  đến  ngày.   
+doc_hai_den_ngay   
+ Datetime  N   
+  
+loai_hop_dong  
+String  Y   30  
+Theo  ID  nền  tảng.  1:  HĐLĐ  không  xác  định  thời  hạn  2:  HĐLĐ  xác  định  thời  hạn  
+ 
+ma_so_hop_dong  
+ String  Y   Số  hợp  đồng  
+ 
+loai_bao_cao  
+String    
+Truyền  theo  ID  nền  tảng  quy  định:  1-  Khai  trình:  Truyền  1  khi  bản  ghi  là  báo  cáo  khai  trình  2-  Báo  cáo:  Truyền  2  khi  bản  ghi  là  báo  cáo  định  kỳ  theo  quy  định  hoặc  đồng  bộ  tự  động  khi  hợp  đồng  có  hiệu  lực.  
+ 
+uuid_hop_dong  
+String    
+Mã  ID  định  danh  của  hợp  đồng  do  nền  tảng  cung  cấp.  NCC  dịch  vụ  econtract  truyền  lên  nếu  nền  tảng  có  mã  ID  này  theo  hợp  đồng.  
+  
+ngay_hieu_luc  
+ Datetime  Y    
+Ngày  hiệu  lực  của  hợp  đồng  
+  
+ngay_het_hieu_luc  
+ Datetime  N    
+Nếu  HĐLĐ  không  xác  định  thời  hạn  thì  không  cần  ngày  hết  hiệu  lực  Nếu  HĐLĐ  xác  định  thời  hạn  cần  phải  có  ngày  hết  hiệu  lực  
+16  
+--- Page 17 ---
+Ngày  hết  hiệu  lực  phải  lớn  hơn  ngày  hiệu  lực  
+  
+thoi_gian_bat_dau_bhxh  
+ Datetime   N     ddmmyyyy  
+  
+thoi_gian_ket_thuc_bhxh  
+ Datetime   N     ddmmyyyy    
+ghi_chu  
+ String   N   4000    
+ 
+phuong_thuc_ky_ket  
+Int  Y   
+1:  Hợp  đồng  lao  động  điện  tử  2:  Hợp  đồng  lao  động  giấy   
+c.  Dữ  liệu  trả  về   
+ 
+STT  Tên  thuộc  tính  Kiểu  dữ  liệu  Độ  dài  Mô  tả  
+1  
+status  
+ 
+String  -  Trạng  thái:  Thành  công  /  Lỗi  
+3  
+error_code  
+ 
+String  -  Mã  lỗi  (nếu  có)  
+4  
+message  
+ 
+String  -  Mô  tả  lỗi  hoặc  kết  quả  xử  lý  
+5  transaction_id  
+String  -  Mã  giao  dịch  
+ 
+d.  Bản  tin  mẫu   URL  
+/hdld/themmoihopdonglaodong  
+Request  mẫu  
+{  
+    "doanhnghiep_uuid" :  "afetlq_5555555545",  
+17  
+--- Page 18 ---
+    "thong_tin_nld" :  {  
+        "ho_ten" :  "Tr ầ n  Xuân  Tr ườ ng",  
+        "ma_so_bhxh" :  "111111",  
+        "ngay_sinh" :  "27041986",  //ddmmyyyy  
+        "gioi_tinh" :  "Nam",  
+        "ma_dinh_danh" :  "033086002518",  
+        "email" :  "truongtx.hvktqs@gmail.com",  
+        "dien_thoai" :  "0913152869"  
+    },  
+    "thong_tin_hop_dong" :  {  
+        "cap_bac" :  "C ấ p  3",  
+        "vi_tri_lam_viec" :  "L ậ p  trình  viên",  
+        "muc_luong" :  "20000000",  
+        "phu_cap_chuc_vu" :  "200000",  
+        "phu_cap_tham_nien" :  "15",  
+        "tham_nien_nghe" :  "2",  
+        "phu_cap_luong" :  "200000",  
+        "cac_khoan_bo_sung" :  "700000",  
+        "doc_hai_tu_ngay" :  "01012020",  
+        "doc_hai_den_ngay" :  "01012026",  
+        "loai_hop_dong" :  "2",  //1:   HĐ  xác  đ ị nh  th ờ i  h ạ n,  2  HĐ  không  xác  đ ị nh  th ờ i  h ạ n  
+        "ma_so_hop_dong" :  "HD00088",  
+        "loai_bao_cao" :  1,  //1:  Khai  trình,  2:  báo  cáo  
+        "uuid_hop_dong" :  "",  
+        "ngay_hieu_luc" :  "01012024",  
+        "ngay_het_hieu_luc":  "",  
+        "thoi_gian_bat_dau_bhxh":  "01012010",  
+        "thoi_gian_ket_thuc_bhxh" :  "01012025",  
+        "ghi_chu" :  "Tao  moi  hop  dong  cho  Tran  Xuan  Truong",  
+        "phuong_thuc_ky_ket" :  1  
+ 
+18  
+--- Page 19 ---
+    }  
+}  
+Response  mẫu  {  
+    "status":  200,  
+    "error_code":  "E00",  
+    "message":  "H ệ  th ố ng  đã  ghi  nh ậ n  d ữ  liêu,  vui  lòng  ki ể m  tra  k ế t  qu ả  ở  api  ki ể m  tra  transaction_id",  
+    "transaction_id":  "insert_20250610071354_5wrSp1",  
+    "hopdong_uuid":  null,  
+    "mahopdong":  null  
+}  
+ 
+ 
+6.  API  Thêm  mới  lô  hợp  đồng  lao  động   
+a.  Mô  tả  API  API  thêm  mới  lô  hợp  đồng  lao  động,  tối  đa  100  hợp  đồng  1  lần  gọi.   Tên  API  API  thêm  mới  thông  tin  doanh  nghiệp  
+URL  
+/hdld/ThemMoiTheoLoHopDongLaoDong  
+Request  Method  POST  
+Giao  thức  HTTPs   b.  Dữ  liệu  đầu  vào   
+STT  Tên  thuộc  tính  Kiểu  dữ  liệu  
+Bắt  buộc/  không  bắt  buộc  
+Độ  dài  Mô  tả  thêm  Header  1  Content-Type
+ 
+String  Y   application/json
+ 
+19  
+--- Page 20 ---
+2  Authorization
+ 
+String  Y   
+Bearer  <Token  nhận  về  khi  login  thành  công>
+ 
+Body  
+ Danh  sách  hợp  đồng 
+List<Object>    Danh  sách  hợp  đồng  với  các  thông  tin  sau:  I  
+doanhnghiep_uuid  
+ 
+String  Y  30  Mã  định  danh  doanh  nghiệp  của  nền  tảng  
+II  thong_tin_nld
+ Object      
+Thông  tin  người  lao  động  bao  gồm  các  thông  tin:  
+  
+ho_ten  
+  String   Y   250  
+ Họ  và  tên  người  lao  động  
+  
+ma_so_bhxh  
+  String   N  30   Mã  số  BHXH  
+  
+ngay_sinh  
+  Datetime   Y    
+ Ngày  tháng  năm  sinh  của  người  lao  động  
+  
+gioi_tinh  
+  String   Y   10  
+ Giới  tính  của  người  lao  động  
+  
+ma_dinh_danh  
+  String   Y   20  
+ Mã  định  danh  người  lao  động  (CCCD/  Hộ  chiếu)  
+ 
+email  
+ String   N  100   
+ 
+dien_thoai  
+ String  N  20   
+III  
+thong_tin_hop_dong
+  Object     
+Thông  tin  hợp  đồng  gồm  các  thông  tin:  
+  
+cap_bac  
+  String   Y   250  
+ Cấp  bậc/  chức  vụ/  chức  danh  nghề  nơi  làm  việc  
+  
+vi_tri_lam_viec  
+  Int   Y    
+Vị  trí  làm  việc  của  người  lao  động  -  1:  Nhà  quản  lý  -  2:  Chuyên  môn  kỹ  thuật  bậc  cao  -  3:  Chuyên  môn  kỹ  thuật  bậc  trung  -  4:  Khác  
+20  
+--- Page 21 ---
+  
+muc_luong  
+  String   Y   30  
+ Mức  lương  nêu  trong  hợp  đồng  
+  
+phu_cap_chuc_vu  
+  String   N   30   
+  
+phu_cap_tham_nien  
+  String   N   30  %  
+  
+tham_nien_nghe  
+  String   N   30  %  
+  
+phu_cap_luong  
+  String   N   30   
+  
+cac_khoan_bo_sung  
+ String   N   30   
+  
+doc_hai_tu_ngay  
+  Datetime   N    
+Thời  gian  tham  gia  ngành  nghề  nặng  nhọc/  độc  hại  (Từ  ngày  -  đến  ngày)  Từ  ngày  nhỏ  hơn  đến  ngày.   
+doc_hai_den_ngay   
+ Datetime  N   
+  
+loai_hop_dong  
+String  Y   30  
+Theo  ID  nền  tảng.  1:  HĐLĐ  không  xác  định  thời  hạn  2:  HĐLĐ  xác  định  thời  hạn  
+ 
+ma_so_hop_dong  
+ String  Y   Số  hợp  đồng  
+ 
+loai_bao_cao  
+String    
+Truyền  theo  ID  nền  tảng  quy  định:  1-  Khai  trình:  Truyền  1  khi  bản  ghi  là  báo  cáo  khai  trình  2-  Báo  cáo:  Truyền  2  khi  bản  ghi  là  báo  cáo  định  kỳ  theo  quy  định  hoặc  đồng  bộ  tự  động  khi  hợp  đồng  có  hiệu  lực.  
+ 
+uuid_hop_dong  
+String    
+Mã  ID  định  danh  của  hợp  đồng  do  nền  tảng  cung  cấp.  NCC  dịch  vụ  econtract  truyền  lên  nếu  nền  tảng  có  mã  ID  này  theo  hợp  đồng.  
+21  
+--- Page 22 ---
+  
+ngay_hieu_luc  
+ Datetime  Y    
+Ngày  hiệu  lực  của  hợp  đồng  
+  
+ngay_het_hieu_luc  
+ Datetime  N    
+Nếu  HĐLĐ  không  xác  định  thời  hạn  thì  không  cần  ngày  hết  hiệu  lực  Nếu  HĐLĐ  xác  định  thời  hạn  cần  phải  có  ngày  hết  hiệu  lực  Ngày  hết  hiệu  lực  phải  lớn  hơn  ngày  hiệu  lực  
+  
+thoi_gian_bat_dau_bhxh  
+ Datetime   N     ddmmyyyy  
+  
+thoi_gian_ket_thuc_bhxh  
+ Datetime   N     ddmmyyyy    
+ghi_chu  
+ String   N   4000    
+ 
+phuong_thuc_ky_ket  
+Int  Y   
+1:  Hợp  đồng  lao  động  điện  tử  2:  Hợp  đồng  lao  động  giấy   
+c.  Dữ  liệu  trả  về   
+ 
+STT  Tên  thuộc  tính  Kiểu  dữ  liệu  Độ  dài  Mô  tả  
+1  
+status  
+ 
+String  -  Trạng  thái:  Thành  công  /  Lỗi  
+2  
+error_code  
+ 
+String  -  Mã  lỗi  (nếu  có)  
+3  
+message  
+ 
+String  -  Mô  tả  lỗi  hoặc  kết  quả  xử  lý  
+4  
+transaction_id  
+ 
+String   -   
+22  
+--- Page 23 ---
+ 
+d.  Bản  tin  mẫu   URL  
+/hdld/themmoihopdonglaodong  
+Request  mẫu  
+{  
+    "doanhnghiep_uuid" :  "afetlq_5555555545",  
+    "thong_tin_nld" :  {  
+        "ho_ten" :  "Tr ầ n  Xuân  Tr ườ ng",  
+        "ma_so_bhxh" :  "111111",  
+        "ngay_sinh" :  "27041986",  //ddmmyyyy  
+        "gioi_tinh" :  "Nam",  
+        "ma_dinh_danh" :  "033086002518",  
+        "email" :  "truongtx.hvktqs@gmail.com",  
+        "dien_thoai" :  "0913152869"  
+    },  
+    "thong_tin_hop_dong" :  {  
+        "cap_bac" :  "C ấ p  3",  
+        "vi_tri_lam_viec" :  "L ậ p  trình  viên",  
+        "muc_luong" :  "20000000",  
+        "phu_cap_chuc_vu" :  "200000",  
+        "phu_cap_tham_nien" :  "15",  
+        "tham_nien_nghe" :  "2",  
+        "phu_cap_luong" :  "200000",  
+        "cac_khoan_bo_sung" :  "700000",  
+        "doc_hai_tu_ngay" :  "01012020",  
+        "doc_hai_den_ngay" :  "01012026",  
+        "loai_hop_dong" :  "2",  //1:   HĐ  xác  đ ị nh  th ờ i  h ạ n,  2  HĐ  không  xác  đ ị nh  th ờ i  h ạ n  
+        "ma_so_hop_dong" :  "HD00088",  
+        "loai_bao_cao" :  1,  //1:  Khai  trình,  2:  báo  cáo  
+23  
+--- Page 24 ---
+        "uuid_hop_dong" :  "",  
+        "ngay_hieu_luc" :  "01012024",  
+        "ngay_het_hieu_luc":  "",  
+        "thoi_gian_bat_dau_bhxh":  "01012010",  
+        "thoi_gian_ket_thuc_bhxh" :  "01012025",  
+        "ghi_chu" :  "Tao  moi  hop  dong  cho  Tran  Xuan  Truong",  
+        "phuong_thuc_ky_ket" :  1  
+    }  
+}  
+Response  mẫu  {  
+    "status":  200,  
+    "error_code":  "E00",  
+    "message":  "H ệ  th ố ng  đã  ghi  nh ậ n  d ữ  liêu,  vui  lòng  ki ể m  tra  k ế t  qu ả  ở  api  ki ể m  tra  transaction_id",  
+    "transaction_id":  "insertlo_20250611094436_VagbCR",  
+    "hopdong_uuid":  null,  
+    "mahopdong":  null  
+}  
+   
+7.  API  cập  nhật  thông  tin  hợp  đồng  lao  động   
+a.  Mô  tả  API  API  cập  nhật  thông  tin  hợp  đồng  lao  động   Tên  API  API  cập  nhật  thông  tin  hợp  đồng  lao  động  
+URL  
+/hdld/CapNhatHopDongLaoDong  
+Request  Method  POST  
+Giao  thức  HTTPs   b.  Dữ  liệu  đầu  vào  
+24  
+--- Page 25 ---
+ 
+ 
+STT  Tên  thuộc  tính  Kiểu  dữ  liệu  
+Bắt  buộc/  không  bắt  buộc  
+Độ  dài  Mô  tả  thêm  Header  1  Content-Type
+ 
+String  Y   application/json
+ 
+2  Authorization
+ 
+String  Y   
+Bearer  <Token  nhận  về  khi  login  thành  công>
+ 
+Body  
+ 
+uuid_hop_dong  
+ 
+String  Y  30  Mã  định  danh  hợp  đồng  của  nền  tảng   
+loai_thay_doi  
+ 
+Number  Y  30  Theo  quy  định  của  nền  tảng:  1:  Thay  đổi  mức  lương  2:   Gia  hạn  hợp  đồng  3:   Chấm  dứt  hợp  đồng  4:  Thay  đổi  vị  trí  làm  việc  5:  Cập  nhật  thông  tin  BHXH   
+thong_tin_thay_doi:  object  theo  t ừ ng  lo ạ i  thay  đ ổ i  
+ 1.  Thay  đổi  lại  mức  lương  hoặc  phụ  cấp  
+  
+muc_luong  
+ Number   Y   30  
+ Mức  lương  nêu  trong  hợp  đồng  
+  
+phu_cap_chuc_vu  
+ Number   N   30   
+  
+phu_cap_tham_nien  
+ Number   N   30  %  
+  
+tham_nien_nghe  
+ Number   N   30  %  
+  
+phu_cap_luong  
+ Number   N   30   
+25  
+--- Page 26 ---
+  
+cac_khoan_bo_sung  
+ Number   N   30   
+ 
+ngay_hieu_luc  
+ Datetime  Y   
+Ngày  áp  dụng  mực  lương  mới.  Định  dạng  ddmmyyyy  
+ 
+ly_do  
+ String  N  250  
+Lý  do  điều  chỉnh  mức  lương.   2.  Gia  hạn  hợp  đồng  
+ 
+ngay_ket_thuc_moi
+ Datetime  Y   
+Ngày  kết  thúc  hợp  đồng  mới    
+ly_do
+ String  N  250    3.  Chấm  dứt  hợp  đồng  
+ 
+ngay_cham_dut_hop_dong
+ Datetime  Y   Ngày  chấm  dứt  HĐ   
+ly_do
+ String  N  250    4.  Thay  đổi  vị  trí  làm  việc/  địa  điểm  
+ 
+vi_tri_lam_viec
+ Number   Y   250  
+Vị  trí  làm  việc  của  người  lao  động  -  1:  Nhà  quản  lý  -  2:  Chuyên  môn  kỹ  thuật  bậc  cao  -  3:  Chuyên  môn  kỹ  thuật  bậc  trung  -  4:  Khác  
+ 
+cap_bac
+  String  Y   250  
+ Cấp  bậc/  chức  vụ/  chức  danh  nghề  nơi  làm  việc  
+ 
+ngay_app_dung_dia_diem_moi
+ Datetime  Y     
+ly_do
+ String  N  250    5.  Thay  đổi  thông  tin  BHXH  
+ 
+ma_so_bhxh
+  String  Y  30   Mã  số  BHXH  
+  
+thoi_gian_bat_dau_bhxh
+  Datetime  Y      
+  
+thoi_gian_ket_thuc_bhxh
+  Datetime  Y       
+ly_do
+ String  N  250   
+ 
+c.  Dữ  liệu  trả  về  
+26  
+--- Page 27 ---
+ 
+ 
+STT  Tên  thuộc  tính  Kiểu  dữ  liệu  Độ  dài  Mô  tả  
+1  
+status  
+ 
+String  -  Trạng  thái:  Thành  công  /  Lỗi  
+2  
+error_code  
+ 
+String  -  Mã  lỗi  (nếu  có)  
+3  
+message  
+ 
+String  -  Mô  tả  lỗi  hoặc  kết  quả  xử  lý  
+4  
+hopdong_uuid  
+ 
+String  -  Mã  hợp  đồng  lao  động  của  nền  tảng  
+5  
+ma_giao_dich  
+String  -  Mã  giao  dịch  của  nền  tảng  
+ 
+d.  Bản  tin  mẫu   URL  
+/hdld/capnhathopdonglaodong  
+Request  mẫu  
+{  
+  "uuid_hop_dong":  "insert_20250605070309_dLsHbn",  
+  "loai_thay_doi":  1,  
+  "thong_tin_thay_doi":  {  
+    "muc_luong":  25000000,  
+    "ngay_hieu_luc":  "10062025",  
+    "phu_cap_chuc_vu":  "11",  
+    "phu_cap_tham_nien":  "11",  
+    "tham_nien_nghe":  "11",  
+    "phu_cap_luong":  "",  
+    "cac_khoan_bo_sung":  "",  
+27  
+--- Page 28 ---
+    "ly_do":  ""  
+  }  
+}  
+Response  mẫu  {  
+    "status":  200,  
+    "error_code":  "E00",  
+    "message":  "Thành  công",  
+    "hopdong_uuid":  "insert_20250605070309_dLsHbn",  
+    "ma_giao_dich":  "update_20250610075732_gcSbIW"  
+}  
+ 
+8.  API  upload  file  đính  kèm  hợp  đồng  lao  động   
+a.  Mô  tả  API  API  upload  file  đính  kèm  hợp  đồng  lao  động   Tên  API  API  cập  nhật  thông  tin  hợp  đồng  lao  động  
+URL  
+/hdld/UploadFileHopDongLaoDong  
+Request  Method  POST  
+Giao  thức  HTTPs   b.  Dữ  liệu  đầu  vào   
+ 
+STT  Tên  thuộc  tính  Kiểu  dữ  liệu  
+Bắt  buộc/  không  bắt  buộc  Độ  dài  Mô  tả  thêm  Header  1  Content-Type
+ 
+String  Y   application/json
+ 
+2  Authorization
+ 
+String  Y   
+Bearer  <Token  nhận  về  khi  login  thành  công>
+ 
+28  
+--- Page 29 ---
+Body  
+ 
+uuid_hop_dong
+ String  Y  30  Mã  định  danh  HĐLĐ  của  nền  tảng  
+ 
+file
+ 
+File  PDF  base  64  Y  5MB  
+File  đính  kèm  hợp  đồng/  phụ  lục  hợp  đồng  
+ 
+c.  Dữ  liệu  trả  về   
+ 
+STT  Tên  thuộc  tính  Kiểu  dữ  liệu  Độ  dài  Mô  tả  
+1  
+status  
+ 
+String  -  Trạng  thái:  Thành  công  /  Lỗi  
+2  
+error_code  
+ 
+String  -  Mã  lỗi  (nếu  có)  
+3  
+message  
+ 
+String  -  Mô  tả  lỗi  hoặc  kết  quả  xử  lý  
+4  
+uuid_file  
+ 
+String  -  File  uuid  của  nền  tảng  
+5  
+ma_giao_dich  
+String  -  Mã  giao  dịch  của  nền  tảng  
+ 
+d.  Bản  tin  mẫu   URL  
+/hdld/uploadﬁlehopdonglaodong  
+Request  mẫu  
+{  
+    "uuid_hop_dong" :  "insert_20250604035424_jQIv2K",  
+    "file" :  "JVBERi0xLjQKJdPr6eEKMSAwIG9iago8PC9UaXRsZSAoYWJvdXQ6Ymxhbms
+29  
+--- Page 30 ---
+pCi9DcmVhdG9yIChNb3ppbGxhLzUuMCBcKFgxMTsgTGludXggeDg2XzY0XCkgQXBwbGVXZWJLaXQvNTM3" 
+}  
+Response  mẫu  {  
+    "status":  200,  
+    "error_code":  "E00",  
+    "message":  "Thành  công",  
+    "ma_giao_dich":  "upload_20250610091503_e77N1F",  
+    "uuid_file":  "updatefile_20250610091504_Gf6eFe"  
+}  
+  
+9.  API  xóa  file  đính  kèm  hợp  đồng  lao  động   
+a.  Mô  tả  API  API  xóa  file  đính  kèm  hợp  đồng  lao  động   Tên  API  API  xóa  file  đính  kèm  hợp  đồng  lao  động  
+URL  
+/hdld/XoaFileHopDong  
+Request  Method  POST  
+Giao  thức  HTTPs   b.  Dữ  liệu  đầu  vào   
+ 
+STT  Tên  thuộc  tính  Kiểu  dữ  liệu  
+Bắt  buộc/  không  bắt  buộc  Độ  dài  Mô  tả  thêm  Header  1  Content-Type
+ 
+String  Y   application/json
+ 
+2  Authorization
+ 
+String  Y   
+Bearer  <Token  nhận  về  khi  login  thành  công>
+ 
+30  
+--- Page 31 ---
+Body  
+ 
+uuid_hop_dong
+ String  Y  30  Mã  định  danh  HĐLĐ  của  nền  tảng  
+ 
+uuid_file  
+String  Y  30  
+File  uuid  của  nền  tảng  
+ 
+c.  Dữ  liệu  trả  về   
+ 
+STT  Tên  thuộc  tính  Kiểu  dữ  liệu  Độ  dài  Mô  tả  
+1  
+status  
+ 
+String  -  Trạng  thái:  Thành  công  /  Lỗi  
+2  
+error_code  
+ 
+String  -  Mã  lỗi  (nếu  có)  
+3  
+message  
+ 
+String  -  Mô  tả  lỗi  hoặc  kết  quả  xử  lý  
+4  
+uuid_file  
+ 
+String  -  File  uuid  của  nền  tảng  
+5  
+ma_giao_dich  
+String  -  Mã  giao  dịch  của  nền  tảng  
+ 
+d.  Bản  tin  mẫu   URL  
+/hdld/xoaﬁlehopdong  
+Request  mẫu  
+{  
+    "uuid_hop_dong" :  "insert_20250604035424_jQIv2K",  
+    "uuid_file" :  "updatefile_20250610091504_Gf6eFe"  
+}  
+31  
+--- Page 32 ---
+Response  mẫu  {  
+    "status":  203,  
+    "error_code":  "E00",  
+    "message":  "Thành  công",  
+    "ma_giao_dich":  "deletefile_20250610092223_h6IM3B",  
+    "uuid_file":  "updatefile_20250610091504_Gf6eFe"  
+}  
+ 
+10.  API  kiểm  tra  trạng  thái  giao  dịch   
+a.  Mô  tả  API  API  kiểm  tra  trạng  thái  giao  dịch   Tên  API  API  kiểm  tra  trạng  thái  giao  dịch  
+URL  
+/hdld/KiemTraTrangThaiGiaoDich  
+Request  Method  POST  
+Giao  thức  HTTPs   b.  Dữ  liệu  đầu  vào   
+ 
+STT  Tên  thuộc  tính  Kiểu  dữ  liệu  
+Bắt  buộc/  không  bắt  buộc  Độ  dài  Mô  tả  thêm  Header  1  Content-Type
+ 
+String  Y   application/json
+ 
+2  Authorization
+ 
+String  Y   
+Bearer  <Token  nhận  về  khi  login  thành  công>
+ 
+Body  
+ 
+ma_giao_dich  
+String  Y  30  Mã  giao  dịch  của  nền  tảng  
+32  
+--- Page 33 ---
+ 
+c.  Dữ  liệu  trả  về   
+ 
+STT  Tên  thuộc  tính  Kiểu  dữ  liệu  Độ  dài  Mô  tả  
+1  
+status  
+ 
+String  -  Trạng  thái:  Thành  công  /  Lỗi  
+2  
+error_code  
+ 
+String  -  Mã  lỗi  (nếu  có)  
+3  
+message  
+ 
+String  -  Mô  tả  lỗi  hoặc  kết  quả  xử  lý  
+5  
+ma_giao_dich  
+String  -  Mã  giao  dịch  của  nền  tảng  
+6  
+data  
+Object   Dữ  liệu  trạng  thái  giao  dịch  bao  gồm:  
+ ma_giao_dich  
+String   Mã  giao  dịch  
+ ma_loi  
+String   Mã  lỗi  
+ trang_thai  
+String   Trạng  thái  
+ ket_qua_xu_ly  
+String   Kết  quả  xử  lý  giao  dịch  
+ hopdong_uuid  
+String   Mã  uuid  
+ 
+d.  Bản  tin  mẫu   URL  
+/hdld/kiemtratrangthaigiaodich  
+33  
+--- Page 34 ---
+Request  mẫu  
+{  
+    "ma_giao_dich" :  "deletefile_20250610092223_h6IM3B"  
+}  
+Response  mẫu  {  
+    "status":  200,  
+    "error_code":  "E00",  
+    "message":  "Thành  công",  
+    "ma_giao_dich":  "checktrans_20250610093028_sOos4A",  
+    "data":  [  
+        {  
+            "ma_giao_dich":  "deletefile_20250610092223_h6IM3B",  
+            "ma_loi":  "E02",  
+            "trang_thai":  "Thành  công",  
+            "ket_qua_xu_ly":  "Thành  công",  
+            "hopdong_uuid":  "insert_20250604035424_jQIv2K",  
+            "ma_so_hop_dong":  null  
+        }  
+    ]  
+}  
+ 
+11.   API  lấy  thông  tin  hợp  đồng  lao  động   a.  Mô  tả  API  API  lấy  thông  tin  hợp  đồng  đã  đồng  bộ   Tên  API  API  lấy  thông  tin  hợp  đồng  đã  đồng  bộ  
+URL  
+/hdld/ThongTinHopDong  
+Request  Method  POST  
+Giao  thức  HTTPs   
+34  
+--- Page 35 ---
+b.  Dữ  liệu  đầu  vào   
+ 
+STT  Tên  thuộc  tính  Kiểu  dữ  liệu  
+Bắt  buộc/  không  bắt  buộc  Độ  dài  Mô  tả  thêm  Header  1  Content-Type
+ 
+String  Y   application/json
+ 
+2  Authorization
+ 
+String  Y   
+Bearer  <Token  nhận  về  khi  login  thành  công>
+ 
+Body  
+ 
+uuid_hop_dong  
+String  Y  30  UUID  hợp  đồng  của  nền  tảng  
+ 
+c.  Dữ  liệu  trả  về   
+ 
+STT  Tên  thuộc  tính  Kiểu  dữ  liệu  Độ  dài  Mô  tả  
+ 
+status  
+ 
+String  -  Trạng  thái:  Thành  công  /  Lỗi  
+ 
+error_code  
+ 
+String  -  Mã  lỗi  (nếu  có)  
+ 
+message  
+ 
+String  -  Mô  tả  lỗi  hoặc  kết  quả  xử  lý  
+ 
+uuid_hop_dong  
+ 
+String  30  Hợp  đồng  uuid  của  nền  tảng  
+ 
+ma_giao_dich  
+String  30  Mã  giao  dịch  của  nền  tảng  
+ 
+data  
+Object  thông  tin  hợp  đồng  với  các  trường  dữ  liệu  sau:  
+35  
+--- Page 36 ---
+ 
+ho_ten  
+String  250  Họ  và  tên  người  lao  động  
+ 
+ma_so_bhxh  
+String  30  Mã  số  BHXH  
+ 
+ngay_sinh  
+Datetime   Ngày  tháng  năm  sinh  của  người  lao  động   
+gioi_tinh  
+String  10  Giới  tính  của  người  lao  động  
+ 
+ma_dinh_danh  
+String  20  Mã  định  danh  người  lao  động  (CCCD/  Hộ  chiếu)   
+email  
+String  100  Email  người  lao  động  
+ 
+dien_thoai  
+String  20  Điện  thoại  người  lao  động  
+ 
+cap_bac  
+String  250  Cấp  bậc/  chức  vụ/  chức  danh  nghề  nơi  làm  việc   
+vi_tri_lam_viec  
+Number   Vị  trí  làm  việc  của  người  lao  động  -  1:  Nhà  quản  lý  -  2:  Chuyên  môn  kỹ  thuật  bậc  cao  -  3:  Chuyên  môn  kỹ  thuật  bậc  trung  -  4:  Khác   
+muc_luong  
+Number  30  Mức  lương  nêu  trong  hợp  đồng  
+ 
+phu_cap_chuc_vu  
+Number  30  Phụ  cấp  chức  vụ  
+ 
+phu_cap_tham_nien  
+Number  30  Phụ  cấp  thâm  niên  vk  (%)  
+ 
+tham_nien_nghe  
+Number  30  Thâm  niên  nghề  (%)  
+ 
+phu_cap_luong  
+Number  30  Phụ  cấp  lương  
+ 
+cac_khoan_bo_sung  
+Number  30  Các  khoản  bổ  sung  
+ 
+doc_hai_tu_ngay  
+Datetime   Thời  gian  tham  gia  ngành  nghề  nặng  nhọc/  độc  hại  (Từ  ngày  -  đến  ngày)  Từ  ngày  nhỏ  hơn  đến  ngày.  
+ 
+doc_hai_den_ngay  
+Datetime   
+ 
+loai_hop_dong  
+Number   1:  HĐLĐ  không  xác  định  thời  hạn  2:  HĐLĐ  xác  định  thời  hạn   
+ma_so_hop_dong  
+String  30  Mã  số  hợp  đồng  
+36  
+--- Page 37 ---
+ 
+loai_bao_cao  
+Number   Theo  ID  nền  tảng  quy  định:  1-  Khai  trình:  Truyền  1  khi  bản  ghi  là  báo  cáo  khai  trình  2-  Báo  cáo:  Truyền  2  khi  bản  ghi  là  báo  cáo  định  kỳ  theo  quy  định  hoặc  đồng  bộ  tự  động  khi  hợp  đồng  có  hiệu  lực.   
+uuid_hop_dong  
+String  30  Mã  ID  định  danh  của  hợp  đồng  do  nền  tảng  cung  cấp.   
+ngay_hieu_luc  
+Datetime   Ngày  hiệu  lực  của  hợp  đồng  
+ 
+ngay_cham_dut_hop_dong  
+Datetime   Ngày  hết  hiệu  lực  
+ 
+thoi_gian_bat_dau_bhxh  
+Datetime   Thời  điểm  bắt  đầu  đóng  BHXH  
+ 
+thoi_gian_ket_thuc_bhxh  
+Datetime   Thời  điểm  kết  thúc  đóng  BHXH  
+ 
+ghi_chu  
+String  4000  Ghi  chú  
+ 
+phuong_thuc_ky_ket  
+Int   1:  Hợp  đồng  lao  động  điện  tử  2:  Hợp  đồng  lao  động  giấy  
+ 
+d.  Bản  tin  mẫu   URL  
+/hdld/thongtinhopdong  
+Request  mẫu  
+{  
+    "uuid_hop_dong" :  "insert_20250604035424_jQIv2K"  
+}  
+Response  mẫu  {  
+    "status":  200,  
+    "error_code":  "E00",  
+    "message":  "Thành  công",  
+    "ma_giao_dich":  "checkinfo_20250610094254_pjPmZz",  
+    "uuid_hop_dong":  "insert_20250604035424_jQIv2K",  
+37  
+--- Page 38 ---
+    "data":  {  
+        "ho_ten":  "H ồ  Kh ắ c  Nam",  
+        "ma_so_bhxh":  "12345645433",  
+        "ngay_sinh":  "16/05/1991",  
+        "gioi_tinh":  "Nam",  
+        "ma_dinh_danh":  "1111",  
+        "email":  "nam@gmail.com",  
+        "dien_thoai":  "",  
+        "cap_bac":  "C ấ p  3",  
+        "vi_tri_lam_viec":  4,  
+        "muc_luong":  "20000000",  
+        "phu_cap_chuc_vu":  "200000",  
+        "phu_cap_tham_nien":  "15",  
+        "tham_nien_nghe":  "2",  
+        "phu_cap_luong":  null,  
+        "cac_khoan_bo_sung":  "",  
+        "doc_hai_tu_ngay":  null,  
+        "loai_hop_dong":  1,  
+        "ma_so_hop_dong":  "222222222",  
+        "loai_bao_cao":  2,  
+        "uuid_hop_dong":  "insert_20250604035424_jQIv2K",  
+        "ngay_hieu_luc":  "16/05/1991",  
+        "thoi_gian_bat_dau_bhxh":  "11/11/2025",  
+        "thoi_gian_ket_thuc_bhxh":  "11/11/2029",  
+        "ghi_chu":  null,  
+        "doc_hai_den_ngay":  null,  
+        "ngay_cham_dut_hop_dong":  null,  
+        "ngay_app_dung_dia_diem_moi":  null,  
+        "phuong_thuc_ky_ket" :  1  
+    }  
+}  
+38  
+--- Page 39 ---
+ 12.  API  lấy  danh  sách  tỉnh/thành  phố   
+a.  Mô  tả  API  API  lấy  danh  sách  tỉnh/thành  phố   Tên  API  API  lấy  danh  sách  tỉnh/thành  phố  
+URL  
+/hdld/danh-muc-tinh/list  
+Request  Method  GET  
+Giao  thức  HTTPs   b.  Dữ  liệu  đầu  vào   
+ 
+STT  Tên  thuộc  tính  Kiểu  dữ  liệu  
+Bắt  buộc/  không  bắt  buộc  Độ  dài  Mô  tả  thêm  Header  1  Content-Type
+ 
+String  Y   application/json
+ 
+2  Authorization
+ 
+String  Y   
+Bearer  <Token  nhận  về  khi  login  thành  công>
+ 
+Param  
+ 
+N/A  
+    
+ 
+c.  Dữ  liệu  trả  về   
+ 
+STT  Tên  thuộc  tính  Kiểu  dữ  liệu  Độ  dài  Mô  tả  
+ 
+Danh  sách  t ỉ nh/thành  ph ố  
+List<Object>  -  Danh  sách  tỉnh/thành  phố  gồm  các  thông  tin:  
+39  
+--- Page 40 ---
+ 
+ 
+id  
+ 
+Number  -  ID  tỉnh  
+ 
+ma  
+ 
+String  30  Mã  tỉnh  
+ 
+ten  
+ 
+String  250  Tên  tỉnh  
+ 
+d.  Bản  tin  mẫu   URL  
+/api/hdld/danh-muc-tinh/list  
+Request  mẫu  
+ 
+Response  mẫu  [  
+    {  
+        "id":  27,  
+        "ten":  "S ơ n  La",  
+        "ma":  "SLA"  
+    },  
+    {  
+        "id":  29,  
+        "ten":  "Lai  Châu",  
+        "ma":  "LCU"  
+    },  
+    {  
+        "id":  30,  
+        "ten":  "Đi ệ n  Biên",  
+40  
+--- Page 41 ---
+        "ma":  "DBN"  
+    },  
+    {  
+        "id":  31,  
+        "ten":  "Cao  B ằ ng",  
+        "ma":  "CBG"  
+    },  
+    {  
+        "id":  32,  
+        "ten":  "L ạ ng  S ơ n",  
+        "ma":  "LSN"  
+    },  
+    ……….  
+]  
+ 
+ 
+13.  API  lấy  danh  sách  xã/phường   
+a.  Mô  tả  API  API  lấy  danh  sách  xã/phường   Tên  API  API  lấy  danh  sách  xã/phường  
+URL  
+/hdld/xa-phuong/paging  
+Request  Method  GET  
+Giao  thức  HTTPs   b.  Dữ  liệu  đầu  vào   
+ 
+STT  Tên  thuộc  tính  Kiểu  dữ  liệu  
+Bắt  buộc/  không  bắt  buộc  Độ  dài  Mô  tả  thêm  
+41  
+--- Page 42 ---
+Header  1  Content-Type
+ 
+String  Y   application/json
+ 
+2  Authorization
+ 
+String  Y   
+Bearer  <Token  nhận  về  khi  login  thành  công>
+ 
+Param  
+ 
+ma_tinh 
+String  N   Mã  tỉnh   
+ma  
+String  N   Mã/tên  xã/phường   
+page_num  
+Number  N   Số  trang   
+page_size  
+Number  N   Số  bản  ghi/trang  
+ 
+c.  Dữ  liệu  trả  về   
+ 
+STT  Tên  thuộc  tính  Kiểu  dữ  liệu  Độ  dài  Mô  tả  
+ 
+total_count  
+Number   Tổng  số  bản  ghi   
+ 
+data  
+ 
+List<Object>  -  Danh  sách  xã/phường  gồm  các  thông  tin:  
+ 
+id  
+ 
+Number  -  ID  xã/phường  
+ 
+ma  
+ 
+String  30  Mã  xã/phường  
+ 
+ten  
+ 
+String  250  Tên  xã/phường  
+ 
+ma_tinh  
+String  30  Mã  tỉnh  
+ 
+ten_tinh  
+String  250  Tên  tỉnh  
+ 
+trang_thai  
+Boolean   Trạng  thái  
+42  
+--- Page 43 ---
+ 
+tinh_id  
+Number   Id  tỉnh  
+ 
+d.  Bản  tin  mẫu   URL  
+/api/hdld/danh-muc-tinh/list  
+Request  mẫu  
+ma_tinh:  HNI  
+page_num:  1  
+page_size:  10  
+Response  mẫu  {  
+    "total_count":  2,  
+    "data":  [          
+        {  
+            "id":  14,  
+            "ma":  "MYDINH",  
+            "ten":  "M ỹ  Đình",  
+            "ma_tinh":  "HNI",  
+            "ten_tinh":  "TP.  Hà  N ộ i",  
+            "trang_thai":  true,  
+            "tinh_id":  15  
+        },  
+        {  
+            "id":  13,  
+            "ma":  "DVHA",  
+            "ten":  "D ị ch  V ọ ng  H ậ u",  
+            "ma_tinh":  "HNI",  
+            "ten_tinh":  "TP.  Hà  N ộ i",  
+            "trang_thai":  true,  
+            "tinh_id":  15  
+        }  
+43  
+--- Page 44 ---
+    ]  
+}  
+ 
+ 
+  
+14.  API  lấy  danh  sách  lĩnh  vực  kinh  doanh   
+a.  Mô  tả  API  API  lấy  danh  sách  lĩnh  vực  kinh  doanh   Tên  API  API  lấy  danh  sách  lĩnh  vực  kinh  doanh  
+URL  
+/hdld/linhvuckinhdoanh  
+Request  Method  GET  
+Giao  thức  HTTPs   b.  Dữ  liệu  đầu  vào   
+ 
+STT  Tên  thuộc  tính  Kiểu  dữ  liệu  
+Bắt  buộc/  không  bắt  buộc  Độ  dài  Mô  tả  thêm  Header  1  Content-Type
+ 
+String  Y   application/json
+ 
+2  Authorization
+ 
+String  Y   
+Bearer  <Token  nhận  về  khi  login  thành  công>
+ 
+Param  
+ 
+N/A 
+    
+ 
+c.  Dữ  liệu  trả  về   
+44  
+--- Page 45 ---
+ 
+Tên  thuộc  tính  Kiểu  dữ  liệu  Độ  dài  Mô  tả  
+Danh  sách  lĩnh  v ự c  kinh  doanh  
+ 
+List<Object>  -  Danh  sách  lĩnh  vực  kinh  doanh  gồm  các  thông  tin:  
+id  
+ 
+Number  -  ID   
+ma  
+ 
+String  30  Mã   
+ten  
+String  250  Tên  
+trang_thai  
+Boolean   Trạng  thái  
+ 
+d.  Bản  tin  mẫu   URL  
+/hdld/linhvuckinhdoanh  
+Request  mẫu  
+ 
+Response  mẫu  [  
+    {  
+        "id":  5,  
+        "ma":  "A",  
+        "ten":  "Nông  nghi ệ p,  lâm  nghi ệ p  và  th ủ y  s ả n",  
+        "trang_thai":  true  
+    },  
+    {  
+        "id":  6,  
+        "ma":  "B",  
+45  
+--- Page 46 ---
+        "ten":  "Khai  khoáng",  
+        "trang_thai":  false  
+    },  
+    {  
+        "id":  11,  
+        "ma":  "C",  
+        "ten":  "Công  nghi ệ p  ch ế  bi ế n,  ch ế  t ạ o",  
+        "trang_thai":  true  
+    },  
+    …….  
+]  
+ 
+ 
+ 
+15.  API  lấy  danh  sách  ngành  nghề   
+a.  Mô  tả  API  API  lấy  danh  sách  ngành  nghề   Tên  API  API  lấy  danh  sách  ngành  nghề  
+URL  
+/hdld/nganhnghe  
+Request  Method  GET  
+Giao  thức  HTTPs   b.  Dữ  liệu  đầu  vào   
+ 
+STT  Tên  thuộc  tính  Kiểu  dữ  liệu  
+Bắt  buộc/  không  bắt  buộc  Độ  dài  Mô  tả  thêm  Header  
+46  
+--- Page 47 ---
+1  Content-Type
+ 
+String  Y   application/json
+ 
+2  Authorization
+ 
+String  Y   
+Bearer  <Token  nhận  về  khi  login  thành  công>
+ 
+Param  
+ 
+N/A 
+    
+ 
+c.  Dữ  liệu  trả  về   
+ 
+Tên  thuộc  tính  Kiểu  dữ  liệu  Độ  dài  Mô  tả  
+Danh  sách  ngành  ngh ề  
+ 
+List<Object>  -  Danh  sách  ngành  nghề  gồm  các  thông  tin:  
+id  
+ 
+Number  -  ID   
+ma  
+ 
+String  30  Mã   
+ten  
+String  250  Tên  
+parent_id  
+Number   Id  ngành  nghề  cha  
+parent_string  
+String  250  Tên  ngành  nghề  cha  
+linhvuc_kinhdoanh_id  
+Number   Id  lĩnh  vực  kinh  doanh  
+linhvuc_kinhdoanh_string  
+String  250  Tên  lĩnh  vực  kinh  doanh  
+trang_thai  
+Boolean   Trạng  thái  
+ 
+   
+47  
+--- Page 48 ---
+ 
+d.  Bản  tin  mẫu   URL  
+/hdld/nganhnghe  
+Request  mẫu  
+ 
+Response  mẫu  [  
+    {  
+        "id":  1,  
+        "ma":  "01",  
+        "ten":  "Nông  nghi ệ p  và  ho ạ t  đ ộ ng  d ị ch  v ụ  có  liên  quan",  
+        "parent_id":  null,  
+        "linhvuc_kinhdoanh_id":  5,  
+        "trang_thai":  true,  
+        "linhvuc_kinhdoanh_string":  "Nông  nghi ệ p,  lâm  nghi ệ p  và  th ủ y  s ả n",  
+        "parent_string":  null  
+    },  
+    {  
+        "id":  2,  
+        "ma":  "011",  
+        "ten":  "Tr ồ ng  cây  hàng  năm",  
+        "parent_id":  1,  
+        "linhvuc_kinhdoanh_id":  5,  
+        "trang_thai":  true,  
+        "linhvuc_kinhdoanh_string":  "Nông  nghi ệ p,  lâm  nghi ệ p  và  th ủ y  s ả n",  
+        "parent_string":  "Nông  nghi ệ p  và  ho ạ t  đ ộ ng  d ị ch  v ụ  có  liên  quan"  
+    },  
+48  
+--- Page 49 ---
+    {  
+        "id":  3,  
+        "ma":  "0111",  
+        "ten":  "Tr ồ ng  lúa",  
+        "parent_id":  2,  
+        "linhvuc_kinhdoanh_id":  5,  
+        "trang_thai":  true,  
+        "linhvuc_kinhdoanh_string":  "Nông  nghi ệ p,  lâm  nghi ệ p  và  th ủ y  s ả n",  
+        "parent_string":  "Tr ồ ng  cây  hàng  năm"  
+    },  
+    …………  
+]  
+ 
+ 
+  
+16.  API  lấy  danh  sách  loại  hình  doanh  nghiệp   a.  Mô  tả  API  API  lấy  danh  sách  loại  hình  doanh  nghiệp   Tên  API  API  lấy  danh  sách  loại  hình  doanh  nghiệp  
+URL  
+/hdld/danhmuc  
+Request  Method  GET  
+Giao  thức  HTTPs   b.  Dữ  liệu  đầu  vào   
+ 
+STT  Tên  thuộc  tính  Kiểu  dữ  liệu  
+Bắt  buộc/  không  bắt  buộc  Độ  dài  Mô  tả  thêm  
+49  
+--- Page 50 ---
+Header  1  Content-Type
+ 
+String  Y   application/json
+ 
+2  Authorization
+ 
+String  Y   
+Bearer  <Token  nhận  về  khi  login  thành  công>
+ 
+Param  
+ 
+loai 
+String  Y   
+Giá  trị:  loai-hinh-doanh-nghiep
+ 
+ 
+c.  Dữ  liệu  trả  về   
+ 
+Tên  thuộc  tính  Kiểu  dữ  liệu  Độ  dài  Mô  tả  
+Danh  sách  lo ạ i  hình  doanh  nghi ệ p  
+ 
+List<Object>  -  Danh  sách  loại  hình  doanh  nghiệp  gồm  các  thông  tin:  
+id  
+ 
+Number  -  ID   
+ma  
+ 
+String  30  Mã   
+ten  
+String  250  Tên  
+loai  
+String  30  Giá  trị:  loai-hinh-doanh-nghiep
+ 
+trang_thai  
+Boolean   Trạng  thái  
+ten_tieng_anh  
+String  250  Tên  tiếng  Anh  
+ 
+d.  Bản  tin  mẫu   
+50  
+--- Page 51 ---
+URL  
+/hdld/linhvuckinhdoanh  
+Request  mẫu  
+Param:  
+loai:  loai-hinh-doanh-nghiep  
+Response  mẫu  [  
+    {  
+        "id":  28,  
+        "ma":  "TNHH",  
+        "ten":  "Công  ty  TNHH",  
+        "loai":  "loai-hinh-doanh-nghiep",  
+        "trang_thai":  true,  
+        "ten_tieng_anh":  null  
+    },  
+    {  
+        "id":  29,  
+        "ma":  "CTCP",  
+        "ten":  "Công  ty  c ổ  ph ầ n",  
+        "loai":  "loai-hinh-doanh-nghiep",  
+        "trang_thai":  true,  
+        "ten_tieng_anh":  null  
+    },  
+    {  
+        "id":  30,  
+        "ma":  "DNNN",  
+        "ten":  "Doanh  nghi ệ p  nhà  n ướ c",  
+        "loai":  "loai-hinh-doanh-nghiep",  
+        "trang_thai":  true,  
+        "ten_tieng_anh":  null  
+    },  
+    {  
+51  
+--- Page 52 ---
+        "id":  31,  
+        "ma":  "HKD",  
+        "ten":  "H ộ  kinh  doanh",  
+        "loai":  "loai-hinh-doanh-nghiep",  
+        "trang_thai":  true,  
+        "ten_tieng_anh":  null  
+    },  
+    {  
+        "id":  23,  
+        "ma":  "DNTN",  
+        "ten":  "Doanh  nghi ệ p  t ư  nhân",  
+        "loai":  "loai-hinh-doanh-nghiep",  
+        "trang_thai":  true,  
+        "ten_tieng_anh":  null  
+    },  
+    {  
+        "id":  22,  
+        "ma":  "CTHD",  
+        "ten":  "Công  ty  h ợ p  danh",  
+        "loai":  "loai-hinh-doanh-nghiep",  
+        "trang_thai":  true,  
+        "ten_tieng_anh":  null  
+    }  
+]  
+ 
+ 
+ 
+ 
+ III.  MÃ  LỖI   
+52  
+--- Page 53 ---
+Trường  hợp  kiểm  tra  
+Mã  lỗi  Tên  lỗi  message  
+Token  hết  hạn  hoặc  không  đúng  
+E01  Token  không  hợp  lệ  
+Token  xác  thực  hết  hạn  hoặc  không  đúng  
+Kiểm  tra  định  dạng  các  trường   
+E02  Dữ  liệu  không  đúng  định  dạng  
+{List  danh  sách  các  trường}  sai  định  dạng   
+Kiểm  tra  các  trường  bắt  buộc  phải  có  dữ  liệu   
+E03  Dữ  liệu  không  đúng  định  dạng.  
+Một  hoặc  nhiều  trường  dữ  liệu  bắt  buộc  bị  thiếu  (List  danh  sách  các  trường  thiếu)  
+Kiểm  tra  thông  tin  đã  tồn  tại  
+E05  Thông  tin  đã  tồn  tại  
+Thông  tin  <Object>  đã  tồn  tại  +  UUID  của  nền  tảng  
+Lỗi  hệ  thống  E06  Lỗi  từ  nền  tảng  
+Lỗi  xử  lý  từ  nền  tảng.  Vui  lòng  thử  lại  sau.  
+ 
+53  
