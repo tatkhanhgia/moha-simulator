@@ -95,10 +95,14 @@
     </dependencies>
 
     <build>
+        <directory>target</directory>
         <plugins>
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
+                <configuration>
+                    <outputDirectory>target</outputDirectory>
+                </configuration>
             </plugin>
         </plugins>
     </build>
