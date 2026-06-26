@@ -35,11 +35,13 @@ public class SecurityConfig {
                 response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
                 response.setContentType(MediaType.APPLICATION_JSON_VALUE);
                 response.setCharacterEncoding(StandardCharsets.UTF_8.name());
-                response.getWriter().write("{\"status\":\"error\",\"error_code\":\"E01\",\"message\":\"Unauthorized\"}");
+                response.getWriter().write("{\"status\":401,\"error_code\":\"E01\",\"message\":\"Token xác thực hết hạn hoặc không đúng\"}");
             }))
+            .headers(headers -> headers.frameOptions(frameOptions -> frameOptions.sameOrigin()))
             .authorizeHttpRequests(auth -> auth
                 .requestMatchers("/hdld/login").permitAll()
                 .requestMatchers("/hdld/**").authenticated()
+                .requestMatchers("/h2-console/**").permitAll()
                 .anyRequest().permitAll()
             )
             .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
