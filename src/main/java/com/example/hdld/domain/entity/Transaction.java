@@ -6,6 +6,12 @@ import java.time.Instant;
 
 /**
  * Entity representing a platform transaction (giao dich).
+ *
+ * <p>The platform processes write operations (create/update/upload/delete) asynchronously:
+ * the write endpoint records a transaction and returns its id, and the caller polls
+ * {@code KiemTraTrangThaiGiaoDich} to obtain the outcome. The outcome fields
+ * ({@code maLoi}, {@code ketQuaXuLy}, {@code hopdongUuid}, {@code maSoHopDong}) carry
+ * that result.
  */
 public class Transaction {
 
@@ -13,6 +19,10 @@ public class Transaction {
     private String loaiGiaoDich;
     private String trangThai;
     private String thongBao;
+    private String maLoi;
+    private String ketQuaXuLy;
+    private String hopdongUuid;
+    private String maSoHopDong;
     private Instant createdAt;
     private Instant updatedAt;
 
@@ -25,6 +35,21 @@ public class Transaction {
         this.loaiGiaoDich = loaiGiaoDich;
         this.trangThai = trangThai;
         this.thongBao = thongBao;
+        this.createdAt = createdAt;
+        this.updatedAt = updatedAt;
+    }
+
+    public Transaction(TransactionId transactionId, String loaiGiaoDich, String trangThai,
+                       String thongBao, String maLoi, String ketQuaXuLy, String hopdongUuid,
+                       String maSoHopDong, Instant createdAt, Instant updatedAt) {
+        this.transactionId = transactionId;
+        this.loaiGiaoDich = loaiGiaoDich;
+        this.trangThai = trangThai;
+        this.thongBao = thongBao;
+        this.maLoi = maLoi;
+        this.ketQuaXuLy = ketQuaXuLy;
+        this.hopdongUuid = hopdongUuid;
+        this.maSoHopDong = maSoHopDong;
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
     }
@@ -65,6 +90,38 @@ public class Transaction {
 
     public void setThongBao(String thongBao) {
         this.thongBao = thongBao;
+    }
+
+    public String getMaLoi() {
+        return maLoi;
+    }
+
+    public void setMaLoi(String maLoi) {
+        this.maLoi = maLoi;
+    }
+
+    public String getKetQuaXuLy() {
+        return ketQuaXuLy;
+    }
+
+    public void setKetQuaXuLy(String ketQuaXuLy) {
+        this.ketQuaXuLy = ketQuaXuLy;
+    }
+
+    public String getHopdongUuid() {
+        return hopdongUuid;
+    }
+
+    public void setHopdongUuid(String hopdongUuid) {
+        this.hopdongUuid = hopdongUuid;
+    }
+
+    public String getMaSoHopDong() {
+        return maSoHopDong;
+    }
+
+    public void setMaSoHopDong(String maSoHopDong) {
+        this.maSoHopDong = maSoHopDong;
     }
 
     public Instant getCreatedAt() {

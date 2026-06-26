@@ -18,7 +18,7 @@ public class ReferenceDataMapper {
         if (entity == null) {
             return null;
         }
-        return new ProvinceResponse(entity.getMa(), entity.getTen(), entity.getTrangThai());
+        return new ProvinceResponse(entity.getId(), entity.getTen(), entity.getMa());
     }
 
     public static List<ProvinceResponse> toProvinceList(List<Province> entities) {
@@ -33,11 +33,13 @@ public class ReferenceDataMapper {
             return null;
         }
         return new WardResponse(
+                entity.getId(),
                 entity.getMa(),
                 entity.getTen(),
                 entity.getTinhThanhId(),
                 entity.getTinhThanhString(),
-                entity.getTrangThai()
+                entity.getTrangThai(),
+                null
         );
     }
 
@@ -52,7 +54,7 @@ public class ReferenceDataMapper {
         if (entity == null) {
             return null;
         }
-        return new SectorResponse(entity.getMa(), entity.getTen(), entity.getTrangThai());
+        return new SectorResponse(entity.getId(), entity.getMa(), entity.getTen(), entity.getTrangThai());
     }
 
     public static List<SectorResponse> toSectorList(List<BusinessSector> entities) {
@@ -67,6 +69,7 @@ public class ReferenceDataMapper {
             return null;
         }
         return new IndustryResponse(
+                entity.getId(),
                 entity.getMa(),
                 entity.getTen(),
                 entity.getParentId(),
@@ -89,6 +92,7 @@ public class ReferenceDataMapper {
             return null;
         }
         return new EnterpriseTypeResponse(
+                entity.getId(),
                 entity.getMa(),
                 entity.getTen(),
                 entity.getLoai(),

@@ -1,7 +1,7 @@
 package com.example.hdld.application.usecase;
 
 import com.example.hdld.application.dto.request.CreateEnterpriseRequest;
-import com.example.hdld.application.dto.response.EnterpriseResponse;
+import com.example.hdld.application.dto.response.CreateEnterpriseResponse;
 import com.example.hdld.application.mapper.EnterpriseMapper;
 import com.example.hdld.domain.entity.Enterprise;
 import com.example.hdld.domain.repository.EnterpriseRepository;
@@ -23,7 +23,7 @@ public class CreateEnterpriseUseCase {
     }
 
     @Transactional
-    public EnterpriseResponse execute(CreateEnterpriseRequest request) {
+    public CreateEnterpriseResponse execute(CreateEnterpriseRequest request) {
         Enterprise enterprise = EnterpriseMapper.toDomain(request);
         enterpriseDomainService.validateRequiredFields(enterprise);
         enterpriseDomainService.validateEmailFormat(
@@ -33,6 +33,6 @@ public class CreateEnterpriseUseCase {
             enterpriseDomainService.validateUniqueTaxCode(enterprise.getMaSoThue());
         }
         Enterprise saved = enterpriseRepository.save(enterprise);
-        return EnterpriseMapper.toResponse(saved);
+        return new CreateEnterpriseResponse(saved.getUuid() != null ? saved.getUuid().toString() : null);
     }
 }

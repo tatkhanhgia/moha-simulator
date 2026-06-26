@@ -1,8 +1,7 @@
 package com.example.hdld.application.mapper;
 
 import com.example.hdld.application.dto.request.CreateContractRequest;
-import com.example.hdld.application.dto.request.UpdateContractRequest;
-import com.example.hdld.application.dto.response.ContractResponse;
+import com.example.hdld.application.dto.response.GetContractResponse;
 import com.example.hdld.domain.entity.ContractInfo;
 import com.example.hdld.domain.entity.EmployeeInfo;
 import com.example.hdld.domain.entity.LaborContract;
@@ -74,107 +73,44 @@ public class ContractMapper {
         return info;
     }
 
-    public static void applyUpdate(LaborContract entity, UpdateContractRequest dto) {
-        if (entity == null || dto == null) {
-            return;
-        }
-        if (dto.getEnterpriseUuid() != null) {
-            entity.setDoanhNghiepUuid(new EnterpriseUuid(dto.getEnterpriseUuid()));
-        }
-        if (dto.getThongTinNld() != null) {
-            applyEmployeeUpdate(entity.getThongTinNld(), dto.getThongTinNld());
-        }
-        if (dto.getThongTinHopDong() != null) {
-            applyContractInfoUpdate(entity.getThongTinHopDong(), dto.getThongTinHopDong());
-        }
-    }
-
-    private static void applyEmployeeUpdate(EmployeeInfo entity, UpdateContractRequest.EmployeeInfoUpdateRequest dto) {
-        if (dto.getHoTen() != null) entity.setHoTen(dto.getHoTen());
-        if (dto.getMaSoBhxh() != null) entity.setMaSoBhxh(dto.getMaSoBhxh());
-        if (dto.getNgaySinh() != null) entity.setNgaySinh(dto.getNgaySinh());
-        if (dto.getGioiTinh() != null) entity.setGioiTinh(dto.getGioiTinh());
-        if (dto.getMaDinhDanh() != null) entity.setMaDinhDanh(dto.getMaDinhDanh());
-        if (dto.getEmail() != null) entity.setEmail(new Email(dto.getEmail()));
-        if (dto.getDienThoai() != null) entity.setDienThoai(dto.getDienThoai());
-    }
-
-    private static void applyContractInfoUpdate(ContractInfo entity, UpdateContractRequest.ContractInfoUpdateRequest dto) {
-        if (dto.getCapBac() != null) entity.setCapBac(dto.getCapBac());
-        if (dto.getViTriLamViec() != null) entity.setViTriLamViec(dto.getViTriLamViec());
-        if (dto.getMucLuong() != null) entity.setMucLuong(dto.getMucLuong());
-        if (dto.getPhuCapChucVu() != null) entity.setPhuCapChucVu(dto.getPhuCapChucVu());
-        if (dto.getPhuCapThamNien() != null) entity.setPhuCapThamNien(dto.getPhuCapThamNien());
-        if (dto.getThamNienNghe() != null) entity.setThamNienNghe(dto.getThamNienNghe());
-        if (dto.getPhuCapLuong() != null) entity.setPhuCapLuong(dto.getPhuCapLuong());
-        if (dto.getCacKhoanBoSung() != null) entity.setCacKhoanBoSung(dto.getCacKhoanBoSung());
-        if (dto.getDocHaiTuNgay() != null) entity.setDocHaiTuNgay(dto.getDocHaiTuNgay());
-        if (dto.getDocHaiDenNgay() != null) entity.setDocHaiDenNgay(dto.getDocHaiDenNgay());
-        if (dto.getLoaiHopDong() != null) entity.setLoaiHopDong(dto.getLoaiHopDong());
-        if (dto.getMaSoHopDong() != null) entity.setMaSoHopDong(dto.getMaSoHopDong());
-        if (dto.getLoaiBaoCao() != null) entity.setLoaiBaoCao(dto.getLoaiBaoCao());
-        if (dto.getUuidHopDong() != null) entity.setUuidHopDong(dto.getUuidHopDong());
-        if (dto.getNgayHieuLuc() != null) entity.setNgayHieuLuc(dto.getNgayHieuLuc());
-        if (dto.getNgayHetHieuLuc() != null) entity.setNgayHetHieuLuc(dto.getNgayHetHieuLuc());
-        if (dto.getThoiGianBatDauBhxh() != null) entity.setThoiGianBatDauBhxh(dto.getThoiGianBatDauBhxh());
-        if (dto.getThoiGianKetThucBhxh() != null) entity.setThoiGianKetThucBhxh(dto.getThoiGianKetThucBhxh());
-        if (dto.getGhiChu() != null) entity.setGhiChu(dto.getGhiChu());
-        if (dto.getPhuongThucKyKet() != null) entity.setPhuongThucKyKet(dto.getPhuongThucKyKet());
-    }
-
-    public static ContractResponse toResponse(LaborContract entity) {
+    /** Flattens a contract into the {@code data} object returned by /hdld/ThongTinHopDong. */
+    public static GetContractResponse.ContractDetail toDetail(LaborContract entity) {
         if (entity == null) {
             return null;
         }
-        ContractResponse resp = new ContractResponse();
-        resp.setContractUuid(entity.getUuid() != null ? entity.getUuid().toString() : null);
-        resp.setEnterpriseUuid(entity.getDoanhNghiepUuid() != null ? entity.getDoanhNghiepUuid().toString() : null);
-        resp.setTrangThai(entity.getTrangThai());
-        resp.setThongTinNld(toEmployeeResponse(entity.getThongTinNld()));
-        resp.setThongTinHopDong(toContractInfoResponse(entity.getThongTinHopDong()));
-        return resp;
-    }
-
-    private static ContractResponse.EmployeeInfoResponse toEmployeeResponse(EmployeeInfo info) {
-        if (info == null) {
-            return null;
+        GetContractResponse.ContractDetail d = new GetContractResponse.ContractDetail();
+        EmployeeInfo nld = entity.getThongTinNld();
+        if (nld != null) {
+            d.setHoTen(nld.getHoTen());
+            d.setMaSoBhxh(nld.getMaSoBhxh());
+            d.setNgaySinh(nld.getNgaySinh());
+            d.setGioiTinh(nld.getGioiTinh());
+            d.setMaDinhDanh(nld.getMaDinhDanh());
+            d.setEmail(nld.getEmail() != null ? nld.getEmail().toString() : null);
+            d.setDienThoai(nld.getDienThoai());
         }
-        ContractResponse.EmployeeInfoResponse resp = new ContractResponse.EmployeeInfoResponse();
-        resp.setHoTen(info.getHoTen());
-        resp.setMaSoBhxh(info.getMaSoBhxh());
-        resp.setNgaySinh(info.getNgaySinh());
-        resp.setGioiTinh(info.getGioiTinh());
-        resp.setMaDinhDanh(info.getMaDinhDanh());
-        resp.setEmail(info.getEmail() != null ? info.getEmail().toString() : null);
-        resp.setDienThoai(info.getDienThoai());
-        return resp;
-    }
-
-    private static ContractResponse.ContractInfoResponse toContractInfoResponse(ContractInfo info) {
-        if (info == null) {
-            return null;
+        ContractInfo hd = entity.getThongTinHopDong();
+        if (hd != null) {
+            d.setCapBac(hd.getCapBac());
+            d.setViTriLamViec(hd.getViTriLamViec());
+            d.setMucLuong(hd.getMucLuong());
+            d.setPhuCapChucVu(hd.getPhuCapChucVu());
+            d.setPhuCapThamNien(hd.getPhuCapThamNien());
+            d.setThamNienNghe(hd.getThamNienNghe());
+            d.setPhuCapLuong(hd.getPhuCapLuong());
+            d.setCacKhoanBoSung(hd.getCacKhoanBoSung());
+            d.setDocHaiTuNgay(hd.getDocHaiTuNgay());
+            d.setDocHaiDenNgay(hd.getDocHaiDenNgay());
+            d.setLoaiHopDong(hd.getLoaiHopDong());
+            d.setMaSoHopDong(hd.getMaSoHopDong());
+            d.setLoaiBaoCao(hd.getLoaiBaoCao());
+            d.setNgayHieuLuc(hd.getNgayHieuLuc());
+            d.setThoiGianBatDauBhxh(hd.getThoiGianBatDauBhxh());
+            d.setThoiGianKetThucBhxh(hd.getThoiGianKetThucBhxh());
+            d.setGhiChu(hd.getGhiChu());
+            d.setPhuongThucKyKet(hd.getPhuongThucKyKet());
         }
-        ContractResponse.ContractInfoResponse resp = new ContractResponse.ContractInfoResponse();
-        resp.setCapBac(info.getCapBac());
-        resp.setViTriLamViec(info.getViTriLamViec());
-        resp.setMucLuong(info.getMucLuong());
-        resp.setPhuCapChucVu(info.getPhuCapChucVu());
-        resp.setPhuCapThamNien(info.getPhuCapThamNien());
-        resp.setThamNienNghe(info.getThamNienNghe());
-        resp.setPhuCapLuong(info.getPhuCapLuong());
-        resp.setCacKhoanBoSung(info.getCacKhoanBoSung());
-        resp.setDocHaiTuNgay(info.getDocHaiTuNgay());
-        resp.setDocHaiDenNgay(info.getDocHaiDenNgay());
-        resp.setLoaiHopDong(info.getLoaiHopDong());
-        resp.setMaSoHopDong(info.getMaSoHopDong());
-        resp.setLoaiBaoCao(info.getLoaiBaoCao());
-        resp.setUuidHopDong(info.getUuidHopDong());
-        resp.setNgayHieuLuc(info.getNgayHieuLuc());
-        resp.setNgayHetHieuLuc(info.getNgayHetHieuLuc());
-        resp.setThoiGianBatDauBhxh(info.getThoiGianBatDauBhxh());
-        resp.setThoiGianKetThucBhxh(info.getThoiGianKetThucBhxh());
-        resp.setGhiChu(info.getGhiChu());
-        resp.setPhuongThucKyKet(info.getPhuongThucKyKet());
-        return resp;
+        d.setUuidHopDong(entity.getUuid() != null ? entity.getUuid().toString() : null);
+        return d;
     }
 }

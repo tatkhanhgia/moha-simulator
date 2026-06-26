@@ -2,6 +2,7 @@ package com.example.hdld.presentation.controller;
 
 import com.example.hdld.application.dto.request.ChangePasswordRequest;
 import com.example.hdld.application.dto.request.LoginRequest;
+import com.example.hdld.application.dto.response.ChangePasswordResponse;
 import com.example.hdld.application.dto.response.LoginResponse;
 import com.example.hdld.application.usecase.AuthenticateUseCase;
 import com.example.hdld.application.usecase.ChangePasswordUseCase;
@@ -18,7 +19,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
- * Authentication endpoints.
+ * Authentication endpoints. Responses follow the HDLD platform's root-level contract
+ * (no {@code data} envelope) — see docs/pdf_extract.txt.
  */
 @RestController
 @RequestMapping("/hdld")
@@ -39,8 +41,8 @@ public class AuthController {
     @ApiResponse(responseCode = "200", description = "Login successful")
     @ApiResponse(responseCode = "400", description = "Validation error")
     @ApiResponse(responseCode = "401", description = "Invalid credentials")
-    public ResponseEntity<com.example.hdld.application.dto.ApiResponse<LoginResponse>> login(@Valid @RequestBody LoginRequest request) {
-        return ResponseEntity.ok(com.example.hdld.application.dto.ApiResponse.success(authenticateUseCase.execute(request)));
+    public ResponseEntity<LoginResponse> login(@Valid @RequestBody LoginRequest request) {
+        return ResponseEntity.ok(authenticateUseCase.execute(request));
     }
 
     @PostMapping("/QuenMatKhau")
@@ -49,11 +51,11 @@ public class AuthController {
     @ApiResponse(responseCode = "400", description = "Validation error")
     @ApiResponse(responseCode = "401", description = "Unauthorized")
     @SecurityRequirement(name = "bearerAuth")
-    public ResponseEntity<com.example.hdld.application.dto.ApiResponse<Void>> changePassword(
+    public ResponseEntity<ChangePasswordResponse> changePassword(
             @Valid @RequestBody ChangePasswordRequest request,
             Authentication authentication) {
         String username = authentication.getName();
-        changePasswordUseCase.execute(username, request);
-        return ResponseEntity.ok(com.example.hdld.application.dto.ApiResponse.success("Password changed successfully", null));
+        String token = changePasswordUseCase.execute(username, request);
+        return ResponseEntity.ok(new ChangePasswordResponse(200, token, "Thành công"));
     }
 }

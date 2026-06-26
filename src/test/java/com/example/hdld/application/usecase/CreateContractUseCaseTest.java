@@ -1,13 +1,14 @@
 package com.example.hdld.application.usecase;
 
 import com.example.hdld.application.dto.request.CreateContractRequest;
-import com.example.hdld.application.dto.response.ContractResponse;
+import com.example.hdld.application.dto.response.CreateContractResponse;
 import com.example.hdld.domain.entity.Enterprise;
 import com.example.hdld.domain.entity.LaborContract;
 import com.example.hdld.domain.exception.NotFoundException;
 import com.example.hdld.domain.exception.ValidationException;
 import com.example.hdld.domain.repository.EnterpriseRepository;
 import com.example.hdld.domain.repository.LaborContractRepository;
+import com.example.hdld.domain.repository.TransactionRepository;
 import com.example.hdld.domain.service.ContractDomainService;
 import com.example.hdld.domain.valueobject.EnterpriseUuid;
 import org.junit.jupiter.api.BeforeEach;
@@ -33,6 +34,8 @@ class CreateContractUseCaseTest {
     private LaborContractRepository contractRepository;
     @Mock
     private EnterpriseRepository enterpriseRepository;
+    @Mock
+    private TransactionRepository transactionRepository;
 
     private ContractDomainService contractDomainService;
     private CreateContractUseCase useCase;
@@ -40,7 +43,7 @@ class CreateContractUseCaseTest {
     @BeforeEach
     void setUp() {
         contractDomainService = new ContractDomainService();
-        useCase = new CreateContractUseCase(contractRepository, enterpriseRepository, contractDomainService);
+        useCase = new CreateContractUseCase(contractRepository, enterpriseRepository, contractDomainService, transactionRepository);
     }
 
     @Test
@@ -54,9 +57,10 @@ class CreateContractUseCaseTest {
         ArgumentCaptor<LaborContract> captor = ArgumentCaptor.forClass(LaborContract.class);
         when(contractRepository.save(captor.capture())).thenAnswer(inv -> inv.getArgument(0));
 
-        ContractResponse response = useCase.execute(request);
+        CreateContractResponse response = useCase.execute(request);
 
         assertThat(response).isNotNull();
+        assertThat(response.getTransactionId()).isNotBlank();
         assertThat(captor.getValue().getThongTinNld().getHoTen()).isEqualTo("Nguyen Van A");
     }
 

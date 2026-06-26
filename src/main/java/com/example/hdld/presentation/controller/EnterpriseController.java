@@ -2,7 +2,8 @@ package com.example.hdld.presentation.controller;
 
 import com.example.hdld.application.dto.request.CreateEnterpriseRequest;
 import com.example.hdld.application.dto.request.UpdateEnterpriseRequest;
-import com.example.hdld.application.dto.response.EnterpriseResponse;
+import com.example.hdld.application.dto.response.CreateEnterpriseResponse;
+import com.example.hdld.application.dto.response.UpdateEnterpriseResponse;
 import com.example.hdld.application.usecase.CreateEnterpriseUseCase;
 import com.example.hdld.application.usecase.UpdateEnterpriseUseCase;
 import io.swagger.v3.oas.annotations.Operation;
@@ -17,7 +18,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
- * Enterprise management endpoints.
+ * Enterprise management endpoints. Responses follow the HDLD platform's root-level
+ * contract (no {@code data} envelope) — see docs/pdf_extract.txt.
  */
 @RestController
 @RequestMapping("/hdld")
@@ -39,9 +41,9 @@ public class EnterpriseController {
     @ApiResponse(responseCode = "200", description = "Enterprise created")
     @ApiResponse(responseCode = "400", description = "Validation error")
     @ApiResponse(responseCode = "401", description = "Unauthorized")
-    public ResponseEntity<com.example.hdld.application.dto.ApiResponse<EnterpriseResponse>> create(
+    public ResponseEntity<CreateEnterpriseResponse> create(
             @Valid @RequestBody CreateEnterpriseRequest request) {
-        return ResponseEntity.ok(com.example.hdld.application.dto.ApiResponse.success(createUseCase.execute(request)));
+        return ResponseEntity.ok(createUseCase.execute(request));
     }
 
     @PostMapping("/CapNhatDoanhNghiep")
@@ -50,8 +52,8 @@ public class EnterpriseController {
     @ApiResponse(responseCode = "400", description = "Validation error")
     @ApiResponse(responseCode = "401", description = "Unauthorized")
     @ApiResponse(responseCode = "404", description = "Enterprise not found")
-    public ResponseEntity<com.example.hdld.application.dto.ApiResponse<EnterpriseResponse>> update(
+    public ResponseEntity<UpdateEnterpriseResponse> update(
             @Valid @RequestBody UpdateEnterpriseRequest request) {
-        return ResponseEntity.ok(com.example.hdld.application.dto.ApiResponse.success(updateUseCase.execute(request)));
+        return ResponseEntity.ok(updateUseCase.execute(request));
     }
 }

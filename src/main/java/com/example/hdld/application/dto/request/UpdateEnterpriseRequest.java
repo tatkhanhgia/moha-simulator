@@ -11,7 +11,7 @@ import jakarta.validation.constraints.Size;
 public class UpdateEnterpriseRequest {
 
     @NotBlank
-    @JsonProperty("enterprise_uuid")
+    @JsonProperty("doanhnghiep_uuid")
     private String enterpriseUuid;
 
     @Size(max = 250)

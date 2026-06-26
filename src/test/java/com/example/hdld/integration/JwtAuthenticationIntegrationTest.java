@@ -34,21 +34,20 @@ class JwtAuthenticationIntegrationTest {
                 .andExpect(status().isOk())
                 .andReturn();
         String body = result.getResponse().getContentAsString();
-        return new ObjectMapper().readTree(body).path("data").path("token").asText();
+        return new ObjectMapper().readTree(body).path("token").asText();
     }
 
     @Test
     void accessProtected_withValidToken_shouldReturn200() throws Exception {
         String token = obtainToken();
-        mockMvc.perform(get("/hdld/tinhthanhpho")
+        mockMvc.perform(get("/hdld/danh-muc-tinh/list")
                         .header("Authorization", "Bearer " + token))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$.error_code").value("E00"));
+                .andExpect(status().isOk());
     }
 
     @Test
     void accessProtected_withInvalidToken_shouldReturn401AndE01() throws Exception {
-        mockMvc.perform(get("/hdld/tinhthanhpho")
+        mockMvc.perform(get("/hdld/danh-muc-tinh/list")
                         .header("Authorization", "Bearer invalid-token"))
                 .andExpect(status().isUnauthorized())
                 .andExpect(jsonPath("$.error_code").value("E01"));
@@ -56,7 +55,7 @@ class JwtAuthenticationIntegrationTest {
 
     @Test
     void accessProtected_withoutToken_shouldReturn401AndE01() throws Exception {
-        mockMvc.perform(get("/hdld/tinhthanhpho"))
+        mockMvc.perform(get("/hdld/danh-muc-tinh/list"))
                 .andExpect(status().isUnauthorized())
                 .andExpect(jsonPath("$.error_code").value("E01"));
     }

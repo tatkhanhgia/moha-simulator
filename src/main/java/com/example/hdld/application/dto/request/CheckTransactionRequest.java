@@ -2,7 +2,6 @@ package com.example.hdld.application.dto.request;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.Pattern;
 
 /**
  * Request DTO for POST /hdld/KiemTraTrangThaiGiaoDich
@@ -10,8 +9,7 @@ import jakarta.validation.constraints.Pattern;
 public class CheckTransactionRequest {
 
     @NotBlank
-    @Pattern(regexp = "^[a-zA-Z0-9]+$", message = "Transaction ID must be alphanumeric")
-    @JsonProperty("transaction_id")
+    @JsonProperty("ma_giao_dich")
     private String transactionId;
 
     public CheckTransactionRequest() {

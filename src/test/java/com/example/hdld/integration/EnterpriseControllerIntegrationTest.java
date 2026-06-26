@@ -33,7 +33,7 @@ class EnterpriseControllerIntegrationTest {
                 .andExpect(status().isOk())
                 .andReturn();
         String body = result.getResponse().getContentAsString();
-        return new ObjectMapper().readTree(body).path("data").path("token").asText();
+        return new ObjectMapper().readTree(body).path("token").asText();
     }
 
     @Test
@@ -47,7 +47,7 @@ class EnterpriseControllerIntegrationTest {
                         .content(json))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.error_code").value("E00"))
-                .andExpect(jsonPath("$.data.ten_doanh_nghiep").value("New Corp"));
+                .andExpect(jsonPath("$.Doanhnghiep_uuid").isNotEmpty());
     }
 
     @Test
@@ -62,7 +62,7 @@ class EnterpriseControllerIntegrationTest {
     }
 
     @Test
-    void createEnterprise_withMissingFields_shouldReturn400AndE02() throws Exception {
+    void createEnterprise_withMissingFields_shouldReturn400AndE03() throws Exception {
         String token = obtainToken();
         String json = "{\"ten_doanh_nghiep\":\"\",\"loai_hinh_doanh_nghiep\":\"DN\",\"dia_chi\":\"123 St\",\"ma_tinh\":\"01\",\"ma_xa\":\"001\",\"ma_so_thue\":\"9876543210\",\"ma_linh_vuc\":\"A\",\"ma_nganh_nghe\":\"011\"}";
 
@@ -71,6 +71,6 @@ class EnterpriseControllerIntegrationTest {
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(json))
                 .andExpect(status().isBadRequest())
-                .andExpect(jsonPath("$.error_code").value("E02"));
+                .andExpect(jsonPath("$.error_code").value("E03"));
     }
 }

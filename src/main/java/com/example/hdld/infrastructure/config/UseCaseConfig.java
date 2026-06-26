@@ -49,8 +49,9 @@ public class UseCaseConfig {
 
     @Bean
     public ChangePasswordUseCase changePasswordUseCase(UserRepository userRepository,
-                                                       PasswordEncoderPort passwordEncoderPort) {
-        return new ChangePasswordUseCase(userRepository, passwordEncoderPort);
+                                                       PasswordEncoderPort passwordEncoderPort,
+                                                       TokenPort tokenPort) {
+        return new ChangePasswordUseCase(userRepository, passwordEncoderPort, tokenPort);
     }
 
     @Bean
@@ -77,8 +78,10 @@ public class UseCaseConfig {
     @Bean
     public CreateContractUseCase createContractUseCase(LaborContractRepository contractRepository,
                                                        EnterpriseRepository enterpriseRepository,
-                                                       ContractDomainService contractDomainService) {
-        return new CreateContractUseCase(contractRepository, enterpriseRepository, contractDomainService);
+                                                       ContractDomainService contractDomainService,
+                                                       TransactionRepository transactionRepository) {
+        return new CreateContractUseCase(contractRepository, enterpriseRepository,
+                contractDomainService, transactionRepository);
     }
 
     @Bean
@@ -87,8 +90,9 @@ public class UseCaseConfig {
     }
 
     @Bean
-    public UpdateContractUseCase updateContractUseCase(LaborContractRepository contractRepository) {
-        return new UpdateContractUseCase(contractRepository);
+    public UpdateContractUseCase updateContractUseCase(LaborContractRepository contractRepository,
+                                                       TransactionRepository transactionRepository) {
+        return new UpdateContractUseCase(contractRepository, transactionRepository);
     }
 
     @Bean
@@ -99,14 +103,17 @@ public class UseCaseConfig {
     @Bean
     public UploadAttachmentUseCase uploadAttachmentUseCase(AttachmentRepository attachmentRepository,
                                                            LaborContractRepository contractRepository,
-                                                           FileStoragePort fileStoragePort) {
-        return new UploadAttachmentUseCase(attachmentRepository, contractRepository, fileStoragePort);
+                                                           FileStoragePort fileStoragePort,
+                                                           TransactionRepository transactionRepository) {
+        return new UploadAttachmentUseCase(attachmentRepository, contractRepository,
+                fileStoragePort, transactionRepository);
     }
 
     @Bean
     public DeleteAttachmentUseCase deleteAttachmentUseCase(AttachmentRepository attachmentRepository,
-                                                           FileStoragePort fileStoragePort) {
-        return new DeleteAttachmentUseCase(attachmentRepository, fileStoragePort);
+                                                           FileStoragePort fileStoragePort,
+                                                           TransactionRepository transactionRepository) {
+        return new DeleteAttachmentUseCase(attachmentRepository, fileStoragePort, transactionRepository);
     }
 
     @Bean

@@ -1,7 +1,7 @@
 package com.example.hdld.application.usecase;
 
 import com.example.hdld.application.dto.request.CreateEnterpriseRequest;
-import com.example.hdld.application.dto.response.EnterpriseResponse;
+import com.example.hdld.application.dto.response.CreateEnterpriseResponse;
 import com.example.hdld.domain.entity.Enterprise;
 import com.example.hdld.domain.exception.ValidationException;
 import com.example.hdld.domain.repository.EnterpriseRepository;
@@ -53,11 +53,10 @@ class CreateEnterpriseUseCaseTest {
             return e;
         });
 
-        EnterpriseResponse response = useCase.execute(request);
+        CreateEnterpriseResponse response = useCase.execute(request);
 
         assertThat(response).isNotNull();
-        assertThat(response.getTenDoanhNghiep()).isEqualTo("Test Corp");
-        assertThat(response.getMaSoThue()).isEqualTo("1234567890");
+        assertThat(response.getDoanhnghiepUuid()).isNotBlank();
         assertThat(captor.getValue().getTenDoanhNghiep()).isEqualTo("Test Corp");
     }
 

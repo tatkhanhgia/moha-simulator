@@ -41,6 +41,10 @@ public class TransactionRepositoryAdapter implements TransactionRepository {
         jpa.setLoaiGiaoDich(domain.getLoaiGiaoDich());
         jpa.setTrangThai(domain.getTrangThai());
         jpa.setThongBao(domain.getThongBao());
+        jpa.setMaLoi(domain.getMaLoi());
+        jpa.setKetQuaXuLy(domain.getKetQuaXuLy());
+        jpa.setHopdongUuid(domain.getHopdongUuid());
+        jpa.setMaSoHopDong(domain.getMaSoHopDong());
         jpa.setCreatedAt(domain.getCreatedAt());
         jpa.setUpdatedAt(domain.getUpdatedAt());
         return jpa;
@@ -52,6 +56,10 @@ public class TransactionRepositoryAdapter implements TransactionRepository {
                 jpa.getLoaiGiaoDich(),
                 jpa.getTrangThai(),
                 jpa.getThongBao(),
+                jpa.getMaLoi(),
+                jpa.getKetQuaXuLy(),
+                jpa.getHopdongUuid(),
+                jpa.getMaSoHopDong(),
                 jpa.getCreatedAt(),
                 jpa.getUpdatedAt()
         );
