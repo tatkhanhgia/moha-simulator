@@ -2,13 +2,13 @@ package com.example.hdld.application.usecase;
 
 import com.example.hdld.application.dto.request.ChangePasswordRequest;
 import com.example.hdld.application.port.PasswordEncoderPort;
+import com.example.hdld.application.port.TokenPort;
 import com.example.hdld.domain.entity.User;
 import com.example.hdld.domain.exception.UnauthorizedException;
 import com.example.hdld.domain.repository.UserRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
@@ -25,12 +25,14 @@ class ChangePasswordUseCaseTest {
     private UserRepository userRepository;
     @Mock
     private PasswordEncoderPort passwordEncoderPort;
+    @Mock
+    private TokenPort tokenPort;
 
     private ChangePasswordUseCase useCase;
 
     @BeforeEach
     void setUp() {
-        useCase = new ChangePasswordUseCase(userRepository, passwordEncoderPort);
+        useCase = new ChangePasswordUseCase(userRepository, passwordEncoderPort, tokenPort);
     }
 
     @Test
@@ -40,14 +42,12 @@ class ChangePasswordUseCaseTest {
         when(userRepository.findByUsername(username)).thenReturn(Optional.of(user));
         when(passwordEncoderPort.matches("oldpass", "oldHash")).thenReturn(true);
         when(passwordEncoderPort.encode("newpass")).thenReturn("newHash");
+        when(tokenPort.generateToken(username)).thenReturn("new-token-123");
 
         ChangePasswordRequest request = new ChangePasswordRequest("oldpass", "newpass");
-        useCase.execute(username, request);
+        String token = useCase.execute(username, request);
 
-        ArgumentCaptor<User> captor = ArgumentCaptor.forClass(User.class);
-        when(userRepository.save(captor.capture())).thenAnswer(inv -> inv.getArgument(0));
-        userRepository.save(user);
-
+        assertThat(token).isEqualTo("new-token-123");
         assertThat(user.getPasswordHash()).isEqualTo("newHash");
     }
 

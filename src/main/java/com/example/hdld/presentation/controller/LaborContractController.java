@@ -4,8 +4,9 @@ import com.example.hdld.application.dto.request.BulkCreateContractRequest;
 import com.example.hdld.application.dto.request.CreateContractRequest;
 import com.example.hdld.application.dto.request.GetContractRequest;
 import com.example.hdld.application.dto.request.UpdateContractRequest;
-import com.example.hdld.application.dto.response.BulkContractResponse;
-import com.example.hdld.application.dto.response.ContractResponse;
+import com.example.hdld.application.dto.response.CreateContractResponse;
+import com.example.hdld.application.dto.response.GetContractResponse;
+import com.example.hdld.application.dto.response.UpdateContractResponse;
 import com.example.hdld.application.usecase.BulkCreateContractUseCase;
 import com.example.hdld.application.usecase.CreateContractUseCase;
 import com.example.hdld.application.usecase.GetContractUseCase;
@@ -22,7 +23,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
- * Labor contract management endpoints.
+ * Labor contract management endpoints. Responses follow the HDLD platform's root-level
+ * contract (see docs/pdf_extract.txt): writes are acknowledged asynchronously with a
+ * transaction id, and the contract detail is read back in a flat {@code data} object.
  */
 @RestController
 @RequestMapping("/hdld")
@@ -47,22 +50,22 @@ public class LaborContractController {
 
     @PostMapping("/ThemMoiHopDongLaoDong")
     @Operation(summary = "Create new labor contract")
-    @ApiResponse(responseCode = "200", description = "Contract created")
+    @ApiResponse(responseCode = "200", description = "Contract accepted")
     @ApiResponse(responseCode = "400", description = "Validation error")
     @ApiResponse(responseCode = "401", description = "Unauthorized")
-    public ResponseEntity<com.example.hdld.application.dto.ApiResponse<ContractResponse>> create(
+    public ResponseEntity<CreateContractResponse> create(
             @Valid @RequestBody CreateContractRequest request) {
-        return ResponseEntity.ok(com.example.hdld.application.dto.ApiResponse.success(createUseCase.execute(request)));
+        return ResponseEntity.ok(createUseCase.execute(request));
     }
 
     @PostMapping("/ThemMoiTheoLoHopDongLaoDong")
     @Operation(summary = "Bulk create labor contracts")
-    @ApiResponse(responseCode = "200", description = "Contracts processed")
+    @ApiResponse(responseCode = "200", description = "Contracts accepted")
     @ApiResponse(responseCode = "400", description = "Validation error")
     @ApiResponse(responseCode = "401", description = "Unauthorized")
-    public ResponseEntity<com.example.hdld.application.dto.ApiResponse<BulkContractResponse>> bulkCreate(
+    public ResponseEntity<CreateContractResponse> bulkCreate(
             @Valid @RequestBody BulkCreateContractRequest request) {
-        return ResponseEntity.ok(com.example.hdld.application.dto.ApiResponse.success(bulkCreateUseCase.execute(request)));
+        return ResponseEntity.ok(bulkCreateUseCase.execute(request));
     }
 
     @PostMapping("/CapNhatHopDongLaoDong")
@@ -71,19 +74,19 @@ public class LaborContractController {
     @ApiResponse(responseCode = "400", description = "Validation error")
     @ApiResponse(responseCode = "401", description = "Unauthorized")
     @ApiResponse(responseCode = "404", description = "Contract not found")
-    public ResponseEntity<com.example.hdld.application.dto.ApiResponse<ContractResponse>> update(
+    public ResponseEntity<UpdateContractResponse> update(
             @Valid @RequestBody UpdateContractRequest request) {
-        return ResponseEntity.ok(com.example.hdld.application.dto.ApiResponse.success(updateUseCase.execute(request)));
+        return ResponseEntity.ok(updateUseCase.execute(request));
     }
 
-    @PostMapping("/LayThongTinHopDong")
+    @PostMapping("/ThongTinHopDong")
     @Operation(summary = "Get contract information")
     @ApiResponse(responseCode = "200", description = "Contract retrieved")
     @ApiResponse(responseCode = "400", description = "Validation error")
     @ApiResponse(responseCode = "401", description = "Unauthorized")
     @ApiResponse(responseCode = "404", description = "Contract not found")
-    public ResponseEntity<com.example.hdld.application.dto.ApiResponse<ContractResponse>> get(
+    public ResponseEntity<GetContractResponse> get(
             @Valid @RequestBody GetContractRequest request) {
-        return ResponseEntity.ok(com.example.hdld.application.dto.ApiResponse.success(getUseCase.execute(request)));
+        return ResponseEntity.ok(getUseCase.execute(request));
     }
 }

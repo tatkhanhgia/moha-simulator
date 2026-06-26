@@ -1,7 +1,7 @@
 package com.example.hdld.application.usecase;
 
 import com.example.hdld.application.dto.request.UpdateEnterpriseRequest;
-import com.example.hdld.application.dto.response.EnterpriseResponse;
+import com.example.hdld.application.dto.response.UpdateEnterpriseResponse;
 import com.example.hdld.application.mapper.EnterpriseMapper;
 import com.example.hdld.domain.entity.Enterprise;
 import com.example.hdld.domain.exception.NotFoundException;
@@ -21,12 +21,12 @@ public class UpdateEnterpriseUseCase {
     }
 
     @Transactional
-    public EnterpriseResponse execute(UpdateEnterpriseRequest request) {
+    public UpdateEnterpriseResponse execute(UpdateEnterpriseRequest request) {
         Enterprise enterprise = enterpriseRepository.findById(new EnterpriseUuid(request.getEnterpriseUuid()))
                 .orElseThrow(() -> new NotFoundException("Enterprise not found: " + request.getEnterpriseUuid()));
 
         EnterpriseMapper.applyUpdate(enterprise, request);
         Enterprise saved = enterpriseRepository.save(enterprise);
-        return EnterpriseMapper.toResponse(saved);
+        return new UpdateEnterpriseResponse(saved.getUuid() != null ? saved.getUuid().toString() : null);
     }
 }

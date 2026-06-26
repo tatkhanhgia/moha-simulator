@@ -10,12 +10,12 @@ import jakarta.validation.constraints.Size;
 public class ChangePasswordRequest {
 
     @NotBlank
-    @JsonProperty("old_password")
+    @JsonProperty("oldPassword")
     private String oldPassword;
 
     @NotBlank
     @Size(min = 6, max = 100)
-    @JsonProperty("new_password")
+    @JsonProperty("newPassword")
     private String newPassword;
 
     public ChangePasswordRequest() {

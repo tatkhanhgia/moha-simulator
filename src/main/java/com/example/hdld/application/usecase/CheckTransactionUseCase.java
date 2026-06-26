@@ -1,14 +1,19 @@
 package com.example.hdld.application.usecase;
 
 import com.example.hdld.application.dto.request.CheckTransactionRequest;
-import com.example.hdld.application.dto.response.TransactionResponse;
+import com.example.hdld.application.dto.response.CheckTransactionResponse;
+import com.example.hdld.application.dto.response.CheckTransactionResponse.TransactionDetail;
 import com.example.hdld.domain.entity.Transaction;
 import com.example.hdld.domain.exception.NotFoundException;
 import com.example.hdld.domain.repository.TransactionRepository;
+import com.example.hdld.domain.service.TransactionIdGenerator;
 import com.example.hdld.domain.valueobject.TransactionId;
 
+import java.util.List;
+
 /**
- * Checks the status of a transaction by its ID.
+ * Checks the status of a transaction by its id (ma_giao_dich) and returns the outcome
+ * in the platform's {@code data[]} shape.
  */
 public class CheckTransactionUseCase {
 
@@ -18,17 +23,20 @@ public class CheckTransactionUseCase {
         this.transactionRepository = transactionRepository;
     }
 
-    public TransactionResponse execute(CheckTransactionRequest request) {
+    public CheckTransactionResponse execute(CheckTransactionRequest request) {
         Transaction transaction = transactionRepository.findById(new TransactionId(request.getTransactionId()))
                 .orElseThrow(() -> new NotFoundException("Transaction not found: " + request.getTransactionId()));
 
-        TransactionResponse resp = new TransactionResponse();
-        resp.setTransactionId(transaction.getTransactionId().toString());
-        resp.setLoaiGiaoDich(transaction.getLoaiGiaoDich());
-        resp.setTrangThai(transaction.getTrangThai());
-        resp.setThongBao(transaction.getThongBao());
-        resp.setCreatedAt(transaction.getCreatedAt());
-        resp.setUpdatedAt(transaction.getUpdatedAt());
-        return resp;
+        TransactionDetail detail = new TransactionDetail(
+                transaction.getTransactionId().toString(),
+                transaction.getMaLoi(),
+                transaction.getTrangThai(),
+                transaction.getKetQuaXuLy(),
+                transaction.getHopdongUuid(),
+                transaction.getMaSoHopDong()
+        );
+
+        String checkId = TransactionIdGenerator.generate(TransactionIdGenerator.CHECK);
+        return new CheckTransactionResponse(checkId, List.of(detail));
     }
 }

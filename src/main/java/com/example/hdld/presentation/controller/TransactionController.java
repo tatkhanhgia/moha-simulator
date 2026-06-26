@@ -1,7 +1,7 @@
 package com.example.hdld.presentation.controller;
 
 import com.example.hdld.application.dto.request.CheckTransactionRequest;
-import com.example.hdld.application.dto.response.TransactionResponse;
+import com.example.hdld.application.dto.response.CheckTransactionResponse;
 import com.example.hdld.application.usecase.CheckTransactionUseCase;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -35,8 +35,8 @@ public class TransactionController {
     @ApiResponse(responseCode = "400", description = "Validation error")
     @ApiResponse(responseCode = "401", description = "Unauthorized")
     @ApiResponse(responseCode = "404", description = "Transaction not found")
-    public ResponseEntity<com.example.hdld.application.dto.ApiResponse<TransactionResponse>> check(
+    public ResponseEntity<CheckTransactionResponse> check(
             @Valid @RequestBody CheckTransactionRequest request) {
-        return ResponseEntity.ok(com.example.hdld.application.dto.ApiResponse.success(checkTransactionUseCase.execute(request)));
+        return ResponseEntity.ok(checkTransactionUseCase.execute(request));
     }
 }

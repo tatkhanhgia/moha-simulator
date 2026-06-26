@@ -33,13 +33,13 @@ class TransactionControllerIntegrationTest {
                 .andExpect(status().isOk())
                 .andReturn();
         String body = result.getResponse().getContentAsString();
-        return new ObjectMapper().readTree(body).path("data").path("token").asText();
+        return new ObjectMapper().readTree(body).path("token").asText();
     }
 
     @Test
     void checkTransaction_existing_shouldReturn200AndE00() throws Exception {
         String token = obtainToken();
-        String json = "{\"transaction_id\":\"TXN123\"}";
+        String json = "{\"ma_giao_dich\":\"TXN123\"}";
 
         mockMvc.perform(post("/hdld/KiemTraTrangThaiGiaoDich")
                         .header("Authorization", "Bearer " + token)
@@ -47,13 +47,14 @@ class TransactionControllerIntegrationTest {
                         .content(json))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.error_code").value("E00"))
-                .andExpect(jsonPath("$.data.transaction_id").value("TXN123"));
+                .andExpect(jsonPath("$.ma_giao_dich").isNotEmpty())
+                .andExpect(jsonPath("$.data[0].ma_giao_dich").value("TXN123"));
     }
 
     @Test
     void checkTransaction_missing_shouldReturn404AndE04() throws Exception {
         String token = obtainToken();
-        String json = "{\"transaction_id\":\"MISSING999\"}";
+        String json = "{\"ma_giao_dich\":\"MISSING999\"}";
 
         mockMvc.perform(post("/hdld/KiemTraTrangThaiGiaoDich")
                         .header("Authorization", "Bearer " + token)
@@ -65,7 +66,7 @@ class TransactionControllerIntegrationTest {
 
     @Test
     void checkTransaction_withoutAuth_shouldReturn401AndE01() throws Exception {
-        String json = "{\"transaction_id\":\"TXN123\"}";
+        String json = "{\"ma_giao_dich\":\"TXN123\"}";
 
         mockMvc.perform(post("/hdld/KiemTraTrangThaiGiaoDich")
                         .contentType(MediaType.APPLICATION_JSON)

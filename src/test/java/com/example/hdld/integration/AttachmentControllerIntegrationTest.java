@@ -35,16 +35,16 @@ class AttachmentControllerIntegrationTest {
                 .andExpect(status().isOk())
                 .andReturn();
         String body = result.getResponse().getContentAsString();
-        return new ObjectMapper().readTree(body).path("data").path("token").asText();
+        return new ObjectMapper().readTree(body).path("token").asText();
     }
 
     @Test
     void upload_withValidBase64_shouldReturn200AndE00() throws Exception {
         String token = obtainToken();
         String base64 = Base64.getEncoder().encodeToString("PDF content".getBytes());
-        String json = "{\"contract_uuid\":\"a0eebc99-9c0b-4ef8-bb6d-6bb9bd380a11\",\"file_name\":\"test.pdf\",\"base64_content\":\"" + base64 + "\"}";
+        String json = "{\"uuid_hop_dong\":\"a0eebc99-9c0b-4ef8-bb6d-6bb9bd380a11\",\"file\":\"" + base64 + "\"}";
 
-        mockMvc.perform(post("/hdld/UploadFileHopDong")
+        mockMvc.perform(post("/hdld/UploadFileHopDongLaoDong")
                         .header("Authorization", "Bearer " + token)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(json))
@@ -57,9 +57,9 @@ class AttachmentControllerIntegrationTest {
         String token = obtainToken();
         byte[] oversized = new byte[5 * 1024 * 1024 + 1];
         String base64 = Base64.getEncoder().encodeToString(oversized);
-        String json = "{\"contract_uuid\":\"a0eebc99-9c0b-4ef8-bb6d-6bb9bd380a11\",\"file_name\":\"big.pdf\",\"base64_content\":\"" + base64 + "\"}";
+        String json = "{\"uuid_hop_dong\":\"a0eebc99-9c0b-4ef8-bb6d-6bb9bd380a11\",\"file\":\"" + base64 + "\"}";
 
-        mockMvc.perform(post("/hdld/UploadFileHopDong")
+        mockMvc.perform(post("/hdld/UploadFileHopDongLaoDong")
                         .header("Authorization", "Bearer " + token)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(json))
@@ -69,7 +69,7 @@ class AttachmentControllerIntegrationTest {
 
     @Test
     void delete_withoutAuth_shouldReturn401AndE01() throws Exception {
-        String json = "{\"attachment_uuid\":\"a0eebc99-9c0b-4ef8-bb6d-6bb9bd380a11\"}";
+        String json = "{\"uuid_hop_dong\":\"a0eebc99-9c0b-4ef8-bb6d-6bb9bd380a11\",\"uuid_file\":\"a0eebc99-9c0b-4ef8-bb6d-6bb9bd380a11\"}";
 
         mockMvc.perform(post("/hdld/XoaFileHopDong")
                         .contentType(MediaType.APPLICATION_JSON)

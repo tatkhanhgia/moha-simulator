@@ -3,9 +3,13 @@ package com.example.hdld.application.dto.response;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 /**
- * Response DTO for enterprise type reference data.
+ * Response DTO for enterprise type reference data (GET /hdld/danhmuc?loai=...).
+ * Per the official contract: {@code id, ma, ten, loai, trang_thai, ten_tieng_anh}.
  */
 public class EnterpriseTypeResponse {
+
+    @JsonProperty("id")
+    private Long id;
 
     @JsonProperty("ma")
     private String ma;
@@ -25,13 +29,17 @@ public class EnterpriseTypeResponse {
     public EnterpriseTypeResponse() {
     }
 
-    public EnterpriseTypeResponse(String ma, String ten, String loai, String trangThai, String tenTiengAnh) {
+    public EnterpriseTypeResponse(Long id, String ma, String ten, String loai, String trangThai, String tenTiengAnh) {
+        this.id = id;
         this.ma = ma;
         this.ten = ten;
         this.loai = loai;
         this.trangThai = trangThai;
         this.tenTiengAnh = tenTiengAnh;
     }
+
+    public Long getId() { return id; }
+    public void setId(Long id) { this.id = id; }
 
     public String getMa() { return ma; }
     public void setMa(String ma) { this.ma = ma; }

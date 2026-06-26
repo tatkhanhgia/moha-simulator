@@ -34,6 +34,6 @@ public class AuthenticateUseCase {
         }
 
         String token = tokenPort.generateToken(user.getUsername());
-        return new LoginResponse(token, 86400L);
+        return new LoginResponse(token);
     }
 }

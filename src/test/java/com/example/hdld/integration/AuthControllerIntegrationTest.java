@@ -35,7 +35,7 @@ class AuthControllerIntegrationTest {
                         .content(objectMapper.writeValueAsString(request)))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.error_code").value("E00"))
-                .andExpect(jsonPath("$.data.token").value(notNullValue()));
+                .andExpect(jsonPath("$.token").value(notNullValue()));
     }
 
     @Test
@@ -62,7 +62,7 @@ class AuthControllerIntegrationTest {
 
     @Test
     void changePassword_withoutAuth_shouldReturn401AndE01() throws Exception {
-        String json = "{\"old_password\":\"old\",\"new_password\":\"newpass123\"}";
+        String json = "{\"oldPassword\":\"old\",\"newPassword\":\"newpass123\"}";
 
         mockMvc.perform(post("/hdld/QuenMatKhau")
                         .contentType(MediaType.APPLICATION_JSON)

@@ -14,9 +14,9 @@ class TransactionIdTest {
     }
 
     @Test
-    void shouldAcceptMaxLength32() {
-        TransactionId txId = new TransactionId("A".repeat(32));
-        assertEquals(32, txId.getValue().length());
+    void shouldAcceptMaxLength40() {
+        TransactionId txId = new TransactionId("A".repeat(40));
+        assertEquals(40, txId.getValue().length());
     }
 
     @Test
@@ -28,14 +28,19 @@ class TransactionIdTest {
 
     @Test
     void shouldRejectTooLong() {
-        assertThrows(ValidationException.class, () -> new TransactionId("A".repeat(33)));
+        assertThrows(ValidationException.class, () -> new TransactionId("A".repeat(41)));
     }
 
     @Test
-    void shouldRejectNonAlphanumeric() {
+    void shouldRejectNonAlphanumericOrUnderscore() {
         assertThrows(ValidationException.class, () -> new TransactionId("TX-123"));
         assertThrows(ValidationException.class, () -> new TransactionId("TX 123"));
-        assertThrows(ValidationException.class, () -> new TransactionId("TX_123"));
+    }
+
+    @Test
+    void shouldAcceptUnderscore() {
+        TransactionId txId = new TransactionId("TX_123");
+        assertEquals("TX_123", txId.getValue());
     }
 
     @Test

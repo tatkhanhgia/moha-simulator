@@ -34,26 +34,24 @@ class ReferenceDataControllerIntegrationTest {
                 .andExpect(status().isOk())
                 .andReturn();
         String body = result.getResponse().getContentAsString();
-        return new ObjectMapper().readTree(body).path("data").path("token").asText();
+        return new ObjectMapper().readTree(body).path("token").asText();
     }
 
     @Test
     void listProvinces_shouldReturn200AndList() throws Exception {
         String token = obtainToken();
-        mockMvc.perform(get("/hdld/tinhthanhpho")
+        mockMvc.perform(get("/hdld/danh-muc-tinh/list")
                         .header("Authorization", "Bearer " + token))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.error_code").value("E00"))
-                .andExpect(jsonPath("$.data").isArray());
+                .andExpect(jsonPath("$").isArray());
     }
 
     @Test
     void listWards_shouldReturn200AndList() throws Exception {
         String token = obtainToken();
-        mockMvc.perform(get("/hdld/xaphuong?province_code=01")
+        mockMvc.perform(get("/hdld/xa-phuong/paging?ma_tinh=01")
                         .header("Authorization", "Bearer " + token))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.error_code").value("E00"))
                 .andExpect(jsonPath("$.data").isArray());
     }
 
@@ -63,8 +61,7 @@ class ReferenceDataControllerIntegrationTest {
         mockMvc.perform(get("/hdld/linhvuckinhdoanh")
                         .header("Authorization", "Bearer " + token))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.error_code").value("E00"))
-                .andExpect(jsonPath("$.data").isArray());
+                .andExpect(jsonPath("$").isArray());
     }
 
     @Test
@@ -73,8 +70,7 @@ class ReferenceDataControllerIntegrationTest {
         mockMvc.perform(get("/hdld/nganhnghe")
                         .header("Authorization", "Bearer " + token))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.error_code").value("E00"))
-                .andExpect(jsonPath("$.data").isArray());
+                .andExpect(jsonPath("$").isArray());
     }
 
     @Test
@@ -83,13 +79,12 @@ class ReferenceDataControllerIntegrationTest {
         mockMvc.perform(get("/hdld/danhmuc?loai=loai_hinh")
                         .header("Authorization", "Bearer " + token))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.error_code").value("E00"))
-                .andExpect(jsonPath("$.data").isArray());
+                .andExpect(jsonPath("$").isArray());
     }
 
     @Test
     void listProvinces_withoutAuth_shouldReturn401AndE01() throws Exception {
-        mockMvc.perform(get("/hdld/tinhthanhpho"))
+        mockMvc.perform(get("/hdld/danh-muc-tinh/list"))
                 .andExpect(status().isUnauthorized())
                 .andExpect(jsonPath("$.error_code").value("E01"));
     }

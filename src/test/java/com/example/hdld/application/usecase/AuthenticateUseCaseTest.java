@@ -48,7 +48,6 @@ class AuthenticateUseCaseTest {
         LoginResponse response = useCase.execute(request);
 
         assertThat(response.getToken()).isEqualTo("jwt-token-123");
-        assertThat(response.getExpiresIn()).isEqualTo(86400L);
     }
 
     @Test

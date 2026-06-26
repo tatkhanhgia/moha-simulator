@@ -3,9 +3,13 @@ package com.example.hdld.application.dto.response;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 /**
- * Response DTO for business sector reference data.
+ * Response DTO for business sector reference data (GET /hdld/linhvuckinhdoanh).
+ * Per the official contract: {@code id, ma, ten, trang_thai}.
  */
 public class SectorResponse {
+
+    @JsonProperty("id")
+    private Long id;
 
     @JsonProperty("ma")
     private String ma;
@@ -19,11 +23,15 @@ public class SectorResponse {
     public SectorResponse() {
     }
 
-    public SectorResponse(String ma, String ten, String trangThai) {
+    public SectorResponse(Long id, String ma, String ten, String trangThai) {
+        this.id = id;
         this.ma = ma;
         this.ten = ten;
         this.trangThai = trangThai;
     }
+
+    public Long getId() { return id; }
+    public void setId(Long id) { this.id = id; }
 
     public String getMa() { return ma; }
     public void setMa(String ma) { this.ma = ma; }

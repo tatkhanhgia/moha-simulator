@@ -3,9 +3,14 @@ package com.example.hdld.application.dto.response;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 /**
- * Response DTO for industry reference data.
+ * Response DTO for industry reference data (GET /hdld/nganhnghe).
+ * Per the official contract the business-sector references use the keys
+ * {@code linhvuc_kinhdoanh_id} / {@code linhvuc_kinhdoanh_string}.
  */
 public class IndustryResponse {
+
+    @JsonProperty("id")
+    private Long id;
 
     @JsonProperty("ma")
     private String ma;
@@ -19,10 +24,10 @@ public class IndustryResponse {
     @JsonProperty("parent_string")
     private String parentString;
 
-    @JsonProperty("linh_vuc_kinh_doanh_id")
+    @JsonProperty("linhvuc_kinhdoanh_id")
     private String linhVucKinhDoanhId;
 
-    @JsonProperty("linh_vuc_kinh_doanh_string")
+    @JsonProperty("linhvuc_kinhdoanh_string")
     private String linhVucKinhDoanhString;
 
     @JsonProperty("trang_thai")
@@ -31,8 +36,9 @@ public class IndustryResponse {
     public IndustryResponse() {
     }
 
-    public IndustryResponse(String ma, String ten, String parentId, String parentString,
+    public IndustryResponse(Long id, String ma, String ten, String parentId, String parentString,
                             String linhVucKinhDoanhId, String linhVucKinhDoanhString, String trangThai) {
+        this.id = id;
         this.ma = ma;
         this.ten = ten;
         this.parentId = parentId;
@@ -41,6 +47,9 @@ public class IndustryResponse {
         this.linhVucKinhDoanhString = linhVucKinhDoanhString;
         this.trangThai = trangThai;
     }
+
+    public Long getId() { return id; }
+    public void setId(Long id) { this.id = id; }
 
     public String getMa() { return ma; }
     public void setMa(String ma) { this.ma = ma; }

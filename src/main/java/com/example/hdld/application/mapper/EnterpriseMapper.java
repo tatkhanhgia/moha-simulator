@@ -2,7 +2,6 @@ package com.example.hdld.application.mapper;
 
 import com.example.hdld.application.dto.request.CreateEnterpriseRequest;
 import com.example.hdld.application.dto.request.UpdateEnterpriseRequest;
-import com.example.hdld.application.dto.response.EnterpriseResponse;
 import com.example.hdld.domain.entity.Enterprise;
 import com.example.hdld.domain.valueobject.Email;
 import com.example.hdld.domain.valueobject.EnterpriseUuid;
@@ -81,27 +80,5 @@ public class EnterpriseMapper {
         if (dto.getMaNganhNghe() != null) {
             entity.setMaNganhNghe(dto.getMaNganhNghe());
         }
-    }
-
-    public static EnterpriseResponse toResponse(Enterprise entity) {
-        if (entity == null) {
-            return null;
-        }
-        EnterpriseResponse resp = new EnterpriseResponse();
-        resp.setEnterpriseUuid(entity.getUuid() != null ? entity.getUuid().toString() : null);
-        resp.setTenDoanhNghiep(entity.getTenDoanhNghiep());
-        resp.setLoaiHinhDoanhNghiep(entity.getLoaiHinhDoanhNghiep());
-        resp.setDiaChi(entity.getDiaChi());
-        resp.setMaTinh(entity.getMaTinh());
-        resp.setMaXa(entity.getMaXa());
-        resp.setNguoiDaiDien(entity.getNguoiDaiDien());
-        resp.setDienThoai(entity.getDienThoai());
-        resp.setFax(entity.getFax());
-        resp.setEmail(entity.getEmail() != null ? entity.getEmail().toString() : null);
-        resp.setWebsite(entity.getWebsite());
-        resp.setMaSoThue(entity.getMaSoThue() != null ? entity.getMaSoThue().toString() : null);
-        resp.setMaLinhVuc(entity.getMaLinhVuc());
-        resp.setMaNganhNghe(entity.getMaNganhNghe());
-        return resp;
     }
 }

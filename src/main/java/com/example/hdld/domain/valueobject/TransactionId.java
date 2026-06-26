@@ -5,13 +5,15 @@ import com.example.hdld.domain.exception.ValidationException;
 import java.util.Objects;
 
 /**
- * Immutable value object representing a transaction identifier.
- * Alphanumeric, length 1-32.
+ * Immutable value object representing a transaction identifier (ma_giao_dich).
+ * The platform issues ids of the form {@code <prefix>_<yyyyMMddHHmmss>_<rand>}
+ * (e.g. {@code insert_20250610071354_5wrSp1}); they are alphanumeric plus
+ * underscore, length 1-40.
  */
 public final class TransactionId {
 
-    private static final String PATTERN = "^[a-zA-Z0-9]+$";
-    private static final int MAX_LENGTH = 32;
+    private static final String PATTERN = "^[a-zA-Z0-9_]+$";
+    private static final int MAX_LENGTH = 40;
 
     private final String value;
 
@@ -23,7 +25,7 @@ public final class TransactionId {
             throw new ValidationException("Transaction ID must not exceed " + MAX_LENGTH + " characters");
         }
         if (!value.matches(PATTERN)) {
-            throw new ValidationException("Transaction ID must be alphanumeric: " + value);
+            throw new ValidationException("Transaction ID must be alphanumeric or underscore: " + value);
         }
         this.value = value;
     }

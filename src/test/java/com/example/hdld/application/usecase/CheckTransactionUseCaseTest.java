@@ -1,7 +1,7 @@
 package com.example.hdld.application.usecase;
 
 import com.example.hdld.application.dto.request.CheckTransactionRequest;
-import com.example.hdld.application.dto.response.TransactionResponse;
+import com.example.hdld.application.dto.response.CheckTransactionResponse;
 import com.example.hdld.domain.entity.Transaction;
 import com.example.hdld.domain.exception.NotFoundException;
 import com.example.hdld.domain.repository.TransactionRepository;
@@ -39,6 +39,10 @@ class CheckTransactionUseCaseTest {
                 "CREATE_CONTRACT",
                 "completed",
                 "Done",
+                "E00",
+                "Thành công",
+                "hopdong-uuid",
+                "MSHD001",
                 Instant.now(),
                 Instant.now()
         );
@@ -46,10 +50,12 @@ class CheckTransactionUseCaseTest {
                 .thenReturn(Optional.of(transaction));
 
         CheckTransactionRequest request = new CheckTransactionRequest("TXN123");
-        TransactionResponse response = useCase.execute(request);
+        CheckTransactionResponse response = useCase.execute(request);
 
-        assertThat(response.getTransactionId()).isEqualTo("TXN123");
-        assertThat(response.getTrangThai()).isEqualTo("completed");
+        assertThat(response.getMaGiaoDich()).isNotBlank();
+        assertThat(response.getData()).hasSize(1);
+        assertThat(response.getData().get(0).getMaGiaoDich()).isEqualTo("TXN123");
+        assertThat(response.getData().get(0).getTrangThai()).isEqualTo("completed");
     }
 
     @Test

@@ -1,13 +1,14 @@
 package com.example.hdld.application.usecase;
 
 import com.example.hdld.application.dto.request.UploadAttachmentRequest;
-import com.example.hdld.application.dto.response.AttachmentResponse;
+import com.example.hdld.application.dto.response.UploadFileResponse;
 import com.example.hdld.application.port.FileStoragePort;
 import com.example.hdld.domain.entity.Attachment;
 import com.example.hdld.domain.exception.NotFoundException;
 import com.example.hdld.domain.exception.ValidationException;
 import com.example.hdld.domain.repository.AttachmentRepository;
 import com.example.hdld.domain.repository.LaborContractRepository;
+import com.example.hdld.domain.repository.TransactionRepository;
 import com.example.hdld.domain.valueobject.ContractUuid;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -34,12 +35,14 @@ class UploadAttachmentUseCaseTest {
     private LaborContractRepository contractRepository;
     @Mock
     private FileStoragePort fileStoragePort;
+    @Mock
+    private TransactionRepository transactionRepository;
 
     private UploadAttachmentUseCase useCase;
 
     @BeforeEach
     void setUp() {
-        useCase = new UploadAttachmentUseCase(attachmentRepository, contractRepository, fileStoragePort);
+        useCase = new UploadAttachmentUseCase(attachmentRepository, contractRepository, fileStoragePort, transactionRepository);
     }
 
     @Test
@@ -49,15 +52,16 @@ class UploadAttachmentUseCaseTest {
                 .thenReturn(Optional.of(new com.example.hdld.domain.entity.LaborContract()));
 
         String base64 = java.util.Base64.getEncoder().encodeToString("PDF content".getBytes());
-        UploadAttachmentRequest request = new UploadAttachmentRequest(contractUuid, "file.pdf", base64);
+        UploadAttachmentRequest request = new UploadAttachmentRequest(contractUuid, base64);
 
-        when(fileStoragePort.store(any(), eq("file.pdf"))).thenReturn("/path/to/file.pdf");
+        when(fileStoragePort.store(any(), any())).thenReturn("/path/to/file.pdf");
         when(attachmentRepository.save(any())).thenAnswer(inv -> inv.getArgument(0));
 
-        AttachmentResponse response = useCase.execute(request);
+        UploadFileResponse response = useCase.execute(request);
 
         assertThat(response).isNotNull();
-        assertThat(response.getFileName()).isEqualTo("file.pdf");
+        assertThat(response.getMaGiaoDich()).isNotBlank();
+        assertThat(response.getUuidFile()).isNotBlank();
     }
 
     @Test
@@ -67,7 +71,7 @@ class UploadAttachmentUseCaseTest {
                 .thenReturn(Optional.empty());
 
         String base64 = java.util.Base64.getEncoder().encodeToString("x".getBytes());
-        UploadAttachmentRequest request = new UploadAttachmentRequest(contractUuid, "file.pdf", base64);
+        UploadAttachmentRequest request = new UploadAttachmentRequest(contractUuid, base64);
 
         assertThatThrownBy(() -> useCase.execute(request))
                 .isInstanceOf(NotFoundException.class)
@@ -80,7 +84,7 @@ class UploadAttachmentUseCaseTest {
         when(contractRepository.findById(new ContractUuid(contractUuid)))
                 .thenReturn(Optional.of(new com.example.hdld.domain.entity.LaborContract()));
 
-        UploadAttachmentRequest request = new UploadAttachmentRequest(contractUuid, "file.pdf", "!!!not-base64!!!");
+        UploadAttachmentRequest request = new UploadAttachmentRequest(contractUuid, "!!!not-base64!!!");
 
         assertThatThrownBy(() -> useCase.execute(request))
                 .isInstanceOf(ValidationException.class)
@@ -95,7 +99,7 @@ class UploadAttachmentUseCaseTest {
 
         byte[] oversized = new byte[5 * 1024 * 1024 + 1];
         String base64 = java.util.Base64.getEncoder().encodeToString(oversized);
-        UploadAttachmentRequest request = new UploadAttachmentRequest(contractUuid, "file.pdf", base64);
+        UploadAttachmentRequest request = new UploadAttachmentRequest(contractUuid, base64);
 
         assertThatThrownBy(() -> useCase.execute(request))
                 .isInstanceOf(ValidationException.class)
@@ -110,14 +114,15 @@ class UploadAttachmentUseCaseTest {
 
         byte[] exactly5MB = new byte[5 * 1024 * 1024];
         String base64 = java.util.Base64.getEncoder().encodeToString(exactly5MB);
-        UploadAttachmentRequest request = new UploadAttachmentRequest(contractUuid, "file.pdf", base64);
+        UploadAttachmentRequest request = new UploadAttachmentRequest(contractUuid, base64);
 
-        when(fileStoragePort.store(any(), eq("file.pdf"))).thenReturn("/path/to/file.pdf");
+        when(fileStoragePort.store(any(), any())).thenReturn("/path/to/file.pdf");
         when(attachmentRepository.save(any())).thenAnswer(inv -> inv.getArgument(0));
 
-        AttachmentResponse response = useCase.execute(request);
+        UploadFileResponse response = useCase.execute(request);
 
         assertThat(response).isNotNull();
-        assertThat(response.getFileSize()).isEqualTo(5L * 1024 * 1024);
+        assertThat(response.getMaGiaoDich()).isNotBlank();
+        assertThat(response.getUuidFile()).isNotBlank();
     }
 }

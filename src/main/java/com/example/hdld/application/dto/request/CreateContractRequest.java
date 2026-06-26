@@ -16,7 +16,7 @@ import java.time.LocalDate;
 public class CreateContractRequest {
 
     @NotBlank
-    @JsonProperty("enterprise_uuid")
+    @JsonProperty("doanhnghiep_uuid")
     private String enterpriseUuid;
 
     @Valid

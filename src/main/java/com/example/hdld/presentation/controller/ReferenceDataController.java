@@ -4,7 +4,7 @@ import com.example.hdld.application.dto.response.EnterpriseTypeResponse;
 import com.example.hdld.application.dto.response.IndustryResponse;
 import com.example.hdld.application.dto.response.ProvinceResponse;
 import com.example.hdld.application.dto.response.SectorResponse;
-import com.example.hdld.application.dto.response.WardResponse;
+import com.example.hdld.application.dto.response.WardPagingResponse;
 import com.example.hdld.application.usecase.ListBusinessSectorsUseCase;
 import com.example.hdld.application.usecase.ListEnterpriseTypesUseCase;
 import com.example.hdld.application.usecase.ListIndustriesUseCase;
@@ -23,7 +23,10 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.List;
 
 /**
- * Reference data lookup endpoints.
+ * Reference data lookup endpoints. Paths and response shapes follow the official
+ * HDLD platform contract (see docs/pdf_extract.txt): most lists are returned as a
+ * bare JSON array at the root; wards use a {@code total_count}/{@code data} paging
+ * envelope.
  */
 @RestController
 @RequestMapping("/hdld")
@@ -49,45 +52,48 @@ public class ReferenceDataController {
         this.listEnterpriseTypesUseCase = listEnterpriseTypesUseCase;
     }
 
-    @GetMapping("/tinhthanhpho")
+    @GetMapping("/danh-muc-tinh/list")
     @Operation(summary = "List all provinces/cities")
     @ApiResponse(responseCode = "200", description = "List retrieved")
     @ApiResponse(responseCode = "401", description = "Unauthorized")
-    public ResponseEntity<com.example.hdld.application.dto.ApiResponse<List<ProvinceResponse>>> listProvinces() {
-        return ResponseEntity.ok(com.example.hdld.application.dto.ApiResponse.success(listProvincesUseCase.execute()));
+    public ResponseEntity<List<ProvinceResponse>> listProvinces() {
+        return ResponseEntity.ok(listProvincesUseCase.execute());
     }
 
-    @GetMapping("/xaphuong")
-    @Operation(summary = "List wards/communes")
+    @GetMapping("/xa-phuong/paging")
+    @Operation(summary = "List wards/communes (paged)")
     @ApiResponse(responseCode = "200", description = "List retrieved")
     @ApiResponse(responseCode = "401", description = "Unauthorized")
-    public ResponseEntity<com.example.hdld.application.dto.ApiResponse<List<WardResponse>>> listWards(
-            @RequestParam(name = "province_code", required = false) String provinceCode) {
-        return ResponseEntity.ok(com.example.hdld.application.dto.ApiResponse.success(listWardsUseCase.execute(provinceCode)));
+    public ResponseEntity<WardPagingResponse> listWards(
+            @RequestParam(name = "ma_tinh", required = false) String maTinh,
+            @RequestParam(name = "ma", required = false) String ma,
+            @RequestParam(name = "page_num", required = false) Integer pageNum,
+            @RequestParam(name = "page_size", required = false) Integer pageSize) {
+        return ResponseEntity.ok(listWardsUseCase.execute(maTinh));
     }
 
     @GetMapping("/linhvuckinhdoanh")
     @Operation(summary = "List business sectors")
     @ApiResponse(responseCode = "200", description = "List retrieved")
     @ApiResponse(responseCode = "401", description = "Unauthorized")
-    public ResponseEntity<com.example.hdld.application.dto.ApiResponse<List<SectorResponse>>> listBusinessSectors() {
-        return ResponseEntity.ok(com.example.hdld.application.dto.ApiResponse.success(listBusinessSectorsUseCase.execute()));
+    public ResponseEntity<List<SectorResponse>> listBusinessSectors() {
+        return ResponseEntity.ok(listBusinessSectorsUseCase.execute());
     }
 
     @GetMapping("/nganhnghe")
     @Operation(summary = "List industries")
     @ApiResponse(responseCode = "200", description = "List retrieved")
     @ApiResponse(responseCode = "401", description = "Unauthorized")
-    public ResponseEntity<com.example.hdld.application.dto.ApiResponse<List<IndustryResponse>>> listIndustries() {
-        return ResponseEntity.ok(com.example.hdld.application.dto.ApiResponse.success(listIndustriesUseCase.execute()));
+    public ResponseEntity<List<IndustryResponse>> listIndustries() {
+        return ResponseEntity.ok(listIndustriesUseCase.execute());
     }
 
     @GetMapping("/danhmuc")
     @Operation(summary = "List categories by type")
     @ApiResponse(responseCode = "200", description = "List retrieved")
     @ApiResponse(responseCode = "401", description = "Unauthorized")
-    public ResponseEntity<com.example.hdld.application.dto.ApiResponse<List<EnterpriseTypeResponse>>> listCategories(
+    public ResponseEntity<List<EnterpriseTypeResponse>> listCategories(
             @RequestParam(name = "loai") String loai) {
-        return ResponseEntity.ok(com.example.hdld.application.dto.ApiResponse.success(listEnterpriseTypesUseCase.execute(loai)));
+        return ResponseEntity.ok(listEnterpriseTypesUseCase.execute(loai));
     }
 }
